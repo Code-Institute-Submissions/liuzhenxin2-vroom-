@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#index-background-image img {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    z-index: -1;
+    animation: bgfadeout ease 3s;
+    animation-iteration-count: 1; 
+    animation-fill-mode: forwards; 
+}
+
+@keyframes bgfadeout { 
+    0% { 
+        opacity: 1; 
+    } 
+    100% { 
+        opacity: 0.5; 
+     } 
+}
+
+#main-page-logo {
+    padding-top: 30%;
+    display: flex;
+    justify-content: center;
+}
+
+#main-page-logo img {
+    height: 150px;
+    width: auto;
+    animation: logofadein ease 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes logofadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
