@@ -47,18 +47,18 @@ body {
 }
 
 #browse-btn {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.6);
     font-size: 1em;
     border-radius: 15px;
-    margin-left: 35%;
-    width: 30%;
+    margin-left: 20%;
+    width: 60%;
     margin-bottom: 5%;
     padding: 1em 0 1em 0;
     color: white;
 }
 
 #browse-btn:hover {
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.6);
     color: black;
 }
 
@@ -66,12 +66,13 @@ body {
     margin-top: 2%;
     display: flex;
     justify-content: space-around;
+    padding-bottom: 5%;
 }
 
 #log-in-btn {
-    background-color: rgba(0, 0, 0, 0.8);
-    font-size: 3em;
-    padding: 1em 1.5em 1em 1.5em;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 2em;
+    padding: 1em 2em 1em 2em;
     border-radius: 15px;
     animation: loginbtn ease;
     animation-duration: 3s;
@@ -91,13 +92,13 @@ body {
 }
 
 #log-in-btn:hover {
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.6);
     color: black;
 }
 
 #sign-up-btn {
-    background-color: rgba(0, 0, 0, 0.8);
-    font-size: 3em;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 2em;
     padding: 1em 2em 1em 2em;
     border-radius: 15px;
     animation: signupbtn ease;
@@ -118,7 +119,7 @@ body {
 }
 
 #sign-up-btn:hover {
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.6);
     color: black;
 }
 
