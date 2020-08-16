@@ -14,7 +14,7 @@ MONGO_URI = os.environ.get('MONGO_URI')
 
 @app.route("/")
 def show_index():
-    return render_template("index.template.html")
+    return render_template("index.html")
 
 
 # "magic code" -- boilerplate
