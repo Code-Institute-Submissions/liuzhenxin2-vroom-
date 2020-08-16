@@ -8,7 +8,13 @@ load_dotenv()
 
 app = Flask(__name__)
 
+app.secret_key = os.environ.get('SECRET_KEY')
 
+MONGO_URI = os.environ.get('MONGO_URI')
+
+@app.route("/")
+def show_index():
+    return render_template("index.template.html")
 
 
 # "magic code" -- boilerplate
