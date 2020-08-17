@@ -11,11 +11,21 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY')
 
 MONGO_URI = os.environ.get('MONGO_URI')
+DB_NAME = "vroom"
 
+client = pymongo.MongoClient(MONGO_URI)
+db = client[DB_NAME]
+
+# Main page route
 @app.route("/")
 def show_index():
     return render_template("index.html")
 
+
+# Create a listing page
+@app.route("/create")
+def show_create():
+    return render_template("create_listing.template.html")
 
 # "magic code" -- boilerplate
 if __name__ == '__main__':
