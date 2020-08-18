@@ -1,5 +1,17 @@
 {%extends "base.template.html"%}
 
 {% block content %}
+<h3 class="create-listing-text mb-5"> Create Your Listing</h3>
+
+<form method="POST">
+{%with%}
+    {%if not previous_values %}
+        {%set previous_values = {} %}
+    {%endif%}
+
     {% include "all_create_listing.template.html" %}
+
+    <input type="submit" value="Create" class="btn btn-dark form-control mt-3 w-50">
+{%endwith%}
+</form>
 {%endblock%}

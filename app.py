@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for
 import os
 import pymongo
 from dotenv import load_dotenv
@@ -27,15 +27,18 @@ def show_index():
 # Create a listing page
 @app.route("/create")
 def show_create():
-    return render_template("create_listing.template.html")
+    car_brand = db.brands.find()
+    return render_template("create_listing.template.html", car_brand=car_brand)
 
 
 @app.route("/create", methods=["POST"])
 def process_create():
 
+    car_brand = db.brands.find()
+
     # retrieve information from the create form
 
-    car_brand = request.form.get("car_brand")
+    brand_id = request.form.get("car_brand")
     car_model = request.form.get("car_model")
     car_type = request.form.get("car_type")
     car_hp = request.form.get("car_hp")
@@ -44,10 +47,35 @@ def process_create():
     car_price = request.form.get("car_price")
     car_mileage = request.form.get("car_mileage")
 
+    # check for error messages
+
+    #accumulator
+
+    errors = {}
+
+    # check if name of car brand has at least 2 letters
+
+    if len(car_model) < 2:
+        errors.update(
+            model_too_short="Please key in at least 2 letters for car model.")
+
+    
+    if len(errors) > 0:
+        return render_template("create_listing.template.html", errors=errors, previous_values=request.form, car_brand = car_brand)
+
+    # fetch the info of the brand by its ID
+
+    car_brand = db.brands.find_one({
+        '_id' : ObjectId(brand_id)
+    })
+
     # create the query
 
     new_listing = {
-        'car_brand': car_brand,
+        'car_brand': {
+            '_id': ObjectId(brand_id),
+            'brand': brand_name["brand"]
+        },
         'car_model': car_model,
         'car_type': car_type,
         'car_hp': car_hp,
@@ -60,6 +88,8 @@ def process_create():
     # execute the query
 
     db.listings.insert_one(new_listing)
+
+    flash("New listing has been created!", "success")
 
     return redirect(url_for('show_created'))
 

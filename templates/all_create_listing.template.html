@@ -1,21 +1,36 @@
-<h3 class="create-listing-text mb-5"> Create Your Listing</h3>
-
-<form method="POST">
-    <input type="text" name="car_brand" value="" placeholder="Car Brand" class="form-control mb-3 w-50">
-    <input type="text" name="car_model" value="" placeholder="Car Model" class="form-control mb-3 w-50">
-    <select name="car_type" id="car_type" class="form-control mb-3 w-50">
-        <option value="Sedan">Sedan</option>
-        <option value="SUV">SUV</option>
-        <option value="MPV">MPV</option>
-        <option value="Sports Car">Sports Car</option>
+<div>
+    <select name="car_brand" class="form-control mt-3 w-50">
+        {% for each_brand in car_brand %}
+        <option value="{{each_brand._id}}" {%if previous_values and each_brand._id == previous_values.car_brand._id%} selected {%endif%}>{{each_brand.brand}}</option>
+        {%endfor%}
     </select>
-    <input type="text" name="car_hp" value="" placeholder="Horse Power" class="form-control mb-3 w-50">
-    <select name="car_condition" id="car_condition" class="form-control mb-3 w-50">
+</div>
+<div>    
+    <input type="text" name="car_model" value="{{previous_values.car_model}}" placeholder="Car Model" class="form-control mt-3 w-50 {%if 'model_too_short' in errors %} is-invalid {%endif%}">
+</div>
+<div>    
+    <select name="car_type" id="car_type" class="form-control mt-3 w-50">
+        <option value="Sedan" {%if previous_values.car_type == "Sedan" %} selected {%endif%}>Sedan</option>
+        <option value="SUV" {%if previous_values.car_type == "SUV" %} selected {%endif%}>SUV</option>
+        <option value="MPV" {%if previous_values.car_type == "MPV" %} selected {%endif%}>MPV</option>
+        <option value="Sports Car" {%if previous_values.car_type == "Sports Car" %} selected {%endif%}>Sports Car</option>
+    </select>
+</div>
+<div>
+    <input type="text" name="car_hp" value="{{previous_values.car_hp}}" placeholder="Horse Power" class="form-control mt-3 w-50">
+</div>
+<div>
+    <select name="car_condition" id="car_condition" class="form-control mt-3 w-50">
         <option value="New">New</option>
         <option value="Used">Used</option>
     </select>
-    <input type="text" name="car_year" placeholder="Manufactured Year" value="" class="form-control mb-3 w-50">
-    <input type="text" name="car_price" placeholder="Price" value="" class="form-control mb-3 w-50">
-    <input type="text" name="car_mileage" placeholder="Mileage" value="" class="form-control mb-3 w-50">
-    <input type="submit" value="Create" class="btn btn-dark form-control w-50">
-</form>
+</div>
+<div>
+    <input type="text" name="car_year" placeholder="Manufactured Year" value="{{previous_values.car_year}}" class="form-control mt-3 w-50">
+</div>
+<div>    
+    <input type="text" name="car_price" placeholder="Price" value="{{previous_values.car_price}}" class="form-control mt-3 w-50">
+</div>
+<div>    
+    <input type="text" name="car_mileage" placeholder="Mileage" value="{{previous_values.car_mileage}}" class="form-control mt-3 w-50">
+</div>
