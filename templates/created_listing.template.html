@@ -1,5 +1,5 @@
 {% extends "base.template.html" %} {% block content %}
-<div class="card d-flex justify-content-center" style="margin: 10% 20% 0 20%; border: 2px white solid; box-shadow: 5px 5px;">
+<div class="card d-flex justify-content-center" style="margin: 10% 20% 10% 20%; border: 2px white solid; box-shadow: 5px 5px;">
   <div id="carouselControls" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
@@ -73,15 +73,15 @@
       >
         <div class="card-body">
           <ul class="list-group list-group-flush">
-            {% for n in new_listing %}
-            <li class="list-group-item">Brand: {{n.car_brand}}</li>
-            <li class="list-group-item">Model: {{n.car_model}}</li>
-            <li class="list-group-item">Car Type: {{n.car_type}}</li>
-            <li class="list-group-item">Horse Power: {{n.car_hp}} bhp</li>
-            <li class="list-group-item">Condition: {{n.car_condition}}</li>
-            <li class="list-group-item">Year Manufactured: {{n.car_year}}</li>
-            <li class="list-group-item">Asking Price: ${{n.car_price}}</li>
-            <li class="list-group-item">Mileage: {{n.car_mileage}} Km</li>
+          {% for n in new_listing %}
+            <li class="list-group-item">Brand: {{n.car.car_brand}}</li>
+            <li class="list-group-item">Model: {{n.car.car_model}}</li>
+            <li class="list-group-item">Car Type: {{n.car.car_type}}</li>
+            <li class="list-group-item">Horse Power: {{n.car.car_hp}} bhp</li>
+            <li class="list-group-item">Condition: {{n.car.car_condition}}</li>
+            <li class="list-group-item">Year Manufactured: {{n.car.car_year}}</li>
+            <li class="list-group-item">Asking Price: ${{n.car.car_price}}</li>
+            <li class="list-group-item">Mileage: {{n.car.car_mileage}} Km</li>
             {%endfor%}
           </ul>
         </div>

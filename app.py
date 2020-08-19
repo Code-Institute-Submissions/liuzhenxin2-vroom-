@@ -2,6 +2,7 @@ from flask import Flask, flash, render_template, request, redirect, url_for
 import os
 import pymongo
 from dotenv import load_dotenv
+from bson.objectid import ObjectId
 import datetime
 
 load_dotenv()
@@ -34,10 +35,7 @@ def show_create():
 @app.route("/create", methods=["POST"])
 def process_create():
 
-    car_brand = db.brands.find()
-
     # retrieve information from the create form
-
     brand_id = request.form.get("car_brand")
     car_model = request.form.get("car_model")
     car_type = request.form.get("car_type")
@@ -59,30 +57,38 @@ def process_create():
         errors.update(
             model_too_short="Please key in at least 2 letters for car model.")
 
-    
     if len(errors) > 0:
-        return render_template("create_listing.template.html", errors=errors, previous_values=request.form, car_brand = car_brand)
+        car_brand = db.brands.find()
+        flash("Unable to create listing", "danger")
+        previous_values = request.form.to_dict()
+        previous_values['car_brand'] = ObjectId(previous_values['car_brand'])
+        return render_template("create_listing.template.html", errors=errors, previous_values=previous_values, car_brand=car_brand)
 
     # fetch the info of the brand by its ID
 
     car_brand = db.brands.find_one({
-        '_id' : ObjectId(brand_id)
+        '_id': ObjectId(brand_id)
     })
+
+    # fetch the info of the user by its ID
 
     # create the query
 
     new_listing = {
-        'car_brand': {
+        #'_id' : ObjectId(user_id),
+        #'seller_name' : user_info["name"],
+        #'seller_contact' : user_info["contact"]["phone"],
+        'car': {
             '_id': ObjectId(brand_id),
-            'brand': brand_name["brand"]
-        },
-        'car_model': car_model,
-        'car_type': car_type,
-        'car_hp': car_hp,
-        'car_condition': car_condition,
-        'car_year': car_year,
-        'car_price': car_price,
-        'car_mileage': car_mileage
+            'car_brand': car_brand["brand"],
+            'car_model': car_model,
+            'car_type': car_type,
+            'car_hp': car_hp,
+            'car_condition': car_condition,
+            'car_year': car_year,
+            'car_price': car_price,
+            'car_mileage': car_mileage
+        }
     }
 
     # execute the query
@@ -99,6 +105,7 @@ def process_create():
 @app.route("/created")
 def show_created():
     new_listing = db.listings.find({}).sort("_id", -1).limit(1)
+    car_brand = db.brands.find()
     return render_template("created_listing.template.html", new_listing=new_listing)
 
 

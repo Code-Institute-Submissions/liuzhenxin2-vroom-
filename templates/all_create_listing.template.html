@@ -1,12 +1,17 @@
+
 <div>
     <select name="car_brand" class="form-control mt-3 w-50">
         {% for each_brand in car_brand %}
-        <option value="{{each_brand._id}}" {%if previous_values and each_brand._id == previous_values.car_brand._id%} selected {%endif%}>{{each_brand.brand}}</option>
+        <option value="{{each_brand._id}}" {%if previous_values and each_brand._id==previous_values.car_brand%} selected {%endif%}>{{each_brand.brand}}</option>
         {%endfor%}
     </select>
 </div>
+
 <div>    
     <input type="text" name="car_model" value="{{previous_values.car_model}}" placeholder="Car Model" class="form-control mt-3 w-50 {%if 'model_too_short' in errors %} is-invalid {%endif%}">
+    <div class="invalid-feedback">
+        {{errors}}
+    </div>
 </div>
 <div>    
     <select name="car_type" id="car_type" class="form-control mt-3 w-50">
