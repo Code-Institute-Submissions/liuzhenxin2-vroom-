@@ -24,6 +24,10 @@ db = client[DB_NAME]
 def show_index():
     return render_template("index.html")
 
+@app.route("/all_listings")
+def show_all_listings():
+    listings = db.listings.find()
+    return render_template("all_listings.template.html", listings=listings)
 
 # Create a listing page
 @app.route("/create")
@@ -163,6 +167,20 @@ def process_update(listing_id):
         }
     })
     return redirect(url_for('show_updated', listing_id=listing_id))
+
+@app.route("/delete/<listing_id>")
+def show_delete_listing(listing_id):
+    listing = db.listings.find_one({
+        '_id' : ObjectId(listing_id)
+    })
+    return render_template("delete_listing.template.html", listing=listing)
+
+@app.route("/delete/<listing_id>", methods=["POST"])
+def process_delete_listing(listing_id):
+    db.listings.remove({
+        '_id' : ObjectId(listing_id)
+    })
+    return redirect(url_for("show_all_listings"))
 
 # "magic code" -- boilerplate
 if __name__ == '__main__':
