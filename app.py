@@ -1,9 +1,11 @@
 from flask import Flask, flash, render_template, request, redirect, url_for
 import os
 import pymongo
+import flask_login
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
 import datetime
+from passlib.hash import pbkdf2_sha256
 
 load_dotenv()
 
@@ -16,6 +18,110 @@ DB_NAME = "vroom"
 
 client = pymongo.MongoClient(MONGO_URI)
 db = client[DB_NAME]
+
+# Login
+
+class User(flask_login.UserMixin):
+    pass
+
+# init flask-login
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def user_loader(email):
+    user = db.users.find_one({
+        'email':email
+    })
+
+    # if the email exists
+    if user:
+        # create a User object that represents the user
+        user_object = User()
+        user_object.id = user["email"]
+         # return the User object
+        return user_object
+    else:
+        # if the email does not exist in the database, report an error
+        return None
+
+@app.route('/')
+def home():
+    return render_template('index.template.html')
+
+
+@app.route('/register')
+def register():
+    return render_template('register.template.html')
+
+
+@app.route('/register', methods=["POST"])
+def process_register():
+
+    # extract out the email and password
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    # TODO: Vadliate if the email and password are proper
+
+    # Create the new user
+    db.users.insert_one({
+        'email': email,
+        'password': pbkdf2_sha256.hash(password)
+    })
+
+    flash("Sign up successful", "success")
+
+    # Redirect to the login page
+    return redirect(url_for('login'))
+
+
+@app.route('/login')
+def login():
+    return render_template('login.template.html')
+
+
+@app.route('/login', methods=["POST"])
+def process_login():
+    # retrieve the email and the password from the form
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    # check if the user's email exists in the database
+    user = db.users.find_one({
+        'email': email
+    })
+
+    # if the user exists, chec if the password matches
+    if user and pbkdf2_sha256.verify(password, user["password"]):
+        # if the password matches, authorize the user
+        user_object = User()
+        user_object.id = user["email"]
+        flask_login.login_user(user_object)
+
+        # redirect to a page and says login is successful
+        flash("Login successful", "success")
+        return redirect(url_for('home'))
+
+    # if the login failed, return back to the login page
+    else:
+        flash("Wrong email or password", "danger")
+        return redirect(url_for('login'))
+
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    flash('Logged out', 'success')
+    return redirect(url_for('login'))
+
+
+
+@app.route('/secret')
+@flask_login.login_required
+def secret():
+    return "You are in top secret area"
 
 # Main page route
 
@@ -64,9 +170,8 @@ def process_create():
     if len(errors) > 0:
         car_brand = db.brands.find()
         flash("Unable to create listing", "danger")
-        # previous_values = request.form.to_dict()
-        # previous_values['car_brand'] = ObjectId(previous_values['car_brand'])
-        previous_values = request.form
+        previous_values = request.form.to_dict()
+        previous_values['car_brand'] = ObjectId(previous_values['car_brand'])
         return render_template("create_listing.template.html", errors=errors, previous_values=previous_values, car_brand=car_brand)
 
     # fetch the info of the brand by its ID
