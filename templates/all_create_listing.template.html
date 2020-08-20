@@ -2,7 +2,7 @@
 <div>
     <select name="car_brand" class="form-control mt-3 w-50">
         {% for each_brand in car_brand %}
-        <option value="{{each_brand._id}}" {%if previous_values and each_brand._id==previous_values.car_brand%} selected {%endif%}>{{each_brand.brand}}</option>
+        <option value="{{each_brand._id}}" {%if previous_values and each_brand._id==previous_values._id%} selected {%endif%}>{{each_brand.brand}}</option>
         {%endfor%}
     </select>
 </div>

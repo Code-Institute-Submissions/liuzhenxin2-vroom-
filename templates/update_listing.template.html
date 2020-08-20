@@ -1,0 +1,15 @@
+{% extends 'base.template.html' %}
+
+{% block content %}
+
+<h3>Update listing: {{listing._id}}</h3>
+
+<form method="POST">
+{%with %}
+    {%set previous_values=listing.car %}
+    {% include 'all_create_listing.template.html' %}
+{%endwith%}
+<input type="submit" value="Update"/>
+</form>
+
+{% endblock %}

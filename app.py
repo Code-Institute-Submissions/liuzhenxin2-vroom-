@@ -102,12 +102,67 @@ def process_create():
 # Show Created listing
 
 
-@app.route("/created")
-def show_created():
+@app.route("/created/<listing_id>")
+def show_created(listing_id):
     new_listing = db.listings.find({}).sort("_id", -1).limit(1)
     car_brand = db.brands.find()
     return render_template("created_listing.template.html", new_listing=new_listing)
 
+@app.route("/updated/<listing_id>")
+def show_updated(listing_id):
+    car_brand =db.brands.find()
+    listing = db.listings.find_one({
+        '_id': ObjectId(listing_id)
+    })
+    return render_template("updated_listing.template.html", listing=listing)
+
+@app.route("/update/<listing_id>")
+def show_update(listing_id):
+    listing = db.listings.find_one({
+        '_id': ObjectId(listing_id)
+    })
+    car_brand = db.brands.find()
+
+    return render_template("update_listing.template.html", listing=listing, car_brand=car_brand)
+
+@app.route("/update/<listing_id>", methods=["POST"])
+def process_update(listing_id):
+    brand_id = request.form.get("car_brand")
+    car_model = request.form.get("car_model")
+    car_type = request.form.get("car_type")
+    car_hp = request.form.get("car_hp")
+    car_condition = request.form.get("car_condition")
+    car_year = request.form.get("car_year")
+    car_price = request.form.get("car_price")
+    car_mileage = request.form.get("car_mileage")
+
+    car_brand = db.brands.find_one({
+        '_id': ObjectId(brand_id)
+    })
+
+    listing = db.listings.find_one({
+        '_id': ObjectId(listing_id)
+    })
+
+    db.listings.update_one({
+        '_id': ObjectId(listing_id)
+    },
+        {
+        '$set': {
+            'car': {
+                '_id': ObjectId(brand_id),
+                'car_brand': car_brand["brand"],
+                'car_model': car_model,
+                'car_type': car_type,
+                'car_hp': car_hp,
+                'car_condition': car_condition,
+                'car_year': car_year,
+                'car_price': car_price,
+                'car_mileage': car_mileage
+            }
+        }
+    })
+    return redirect(url_for('show_updated', listing_id=listing_id))
 
 # "magic code" -- boilerplate
 if __name__ == '__main__':
