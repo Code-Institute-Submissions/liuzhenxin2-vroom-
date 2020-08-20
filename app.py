@@ -64,8 +64,9 @@ def process_create():
     if len(errors) > 0:
         car_brand = db.brands.find()
         flash("Unable to create listing", "danger")
-        previous_values = request.form.to_dict()
-        previous_values['car_brand'] = ObjectId(previous_values['car_brand'])
+        # previous_values = request.form.to_dict()
+        # previous_values['car_brand'] = ObjectId(previous_values['car_brand'])
+        previous_values = request.form
         return render_template("create_listing.template.html", errors=errors, previous_values=previous_values, car_brand=car_brand)
 
     # fetch the info of the brand by its ID
