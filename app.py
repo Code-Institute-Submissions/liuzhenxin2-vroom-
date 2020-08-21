@@ -48,7 +48,7 @@ def user_loader(email):
 
 @app.route('/')
 def home():
-    return render_template('index.template.html')
+    return render_template('index.html')
 
 
 @app.route('/register')
@@ -116,12 +116,26 @@ def logout():
     flash('Logged out', 'success')
     return redirect(url_for('login'))
 
-
-
-@app.route('/secret')
+@app.route('/create')
 @flask_login.login_required
-def secret():
-    return "You are in top secret area"
+def secret_create():
+    return "Please Login"
+
+@app.route('/update/<listing_id>')
+@flask_login.login_required
+def secret_update(listing_id):
+    db.listings.find_one({
+        '_id': ObjectId(listing_id)
+    })
+    return "Please Login"
+
+@app.route('/delete/<listing_id>')
+@flask_login.login_required
+def secret_delete(listing_id):
+    db.listings.find_one({
+        '_id': ObjectId(listing_id)
+    })
+    return "Please Login"
 
 # Main page route
 
