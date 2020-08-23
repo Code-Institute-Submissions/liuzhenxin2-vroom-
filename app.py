@@ -65,21 +65,23 @@ def process_register():
     # extract out the email and password
     email = request.form.get('email')
     password = request.form.get('password')
-    username = request.form.get('username')
+    nickname = request.form.get('nickname')
     phone = request.form.get('phone')
 
     # TODO: Vadliate if the email and password are proper
+    users = db.users.find_one({
+        'email':email
+    })
 
-    if email:
+    if users:
         flash("Email already exists", "danger")
         return redirect(url_for('register'))
-    
     else:
         # Create the new user
         db.users.insert_one({
             'email': email,
             'password': pbkdf2_sha256.hash(password),
-            'username': username,
+            'nickname': nickname,
             'phone': phone
         })
 
