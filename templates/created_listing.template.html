@@ -73,16 +73,7 @@
       >
         <div class="card-body">
           <ul class="list-group list-group-flush">
-          {% for n in new_listing %}
-            <li class="list-group-item">Brand: {{n.car.car_brand}}</li>
-            <li class="list-group-item">Model: {{n.car.car_model}}</li>
-            <li class="list-group-item">Car Type: {{n.car.car_type}}</li>
-            <li class="list-group-item">Horse Power: {{n.car.car_hp}} bhp</li>
-            <li class="list-group-item">Condition: {{n.car.car_condition}}</li>
-            <li class="list-group-item">Year Manufactured: {{n.car.car_year}}</li>
-            <li class="list-group-item">Asking Price: ${{n.car.car_price}}</li>
-            <li class="list-group-item">Mileage: {{n.car.car_mileage}} Km</li>
-            {%endfor%}
+            
           </ul>
         </div>
       </div>

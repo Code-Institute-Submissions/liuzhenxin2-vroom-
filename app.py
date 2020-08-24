@@ -21,18 +21,21 @@ db = client[DB_NAME]
 
 # Login
 
+
 class User(flask_login.UserMixin):
     pass
+
 
 # init flask-login
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+
 @login_manager.user_loader
 def user_loader(email):
     user = db.users.find_one({
-        'email':email
+        'email': email
     })
 
     # if the email exists
@@ -48,6 +51,7 @@ def user_loader(email):
     else:
         # if the email does not exist in the database, report an error
         return None
+
 
 @app.route('/')
 def home():
@@ -70,7 +74,7 @@ def process_register():
 
     # TODO: Vadliate if the email and password are proper
     users = db.users.find_one({
-        'email':email
+        'email': email
     })
 
     if users:
@@ -128,6 +132,7 @@ def process_login():
         flash("Wrong email or password", "danger")
         return redirect(url_for('login'))
 
+
 @app.route('/profile')
 @flask_login.login_required
 def profile():
@@ -135,16 +140,13 @@ def profile():
     account_id = flask_login.current_user.account_id
     return f"Email = {email}, account_id={account_id}"
 
+
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
     flash('Logged out', 'success')
     return redirect(url_for('login'))
 
-@app.route('/create')
-@flask_login.login_required
-def secret_create():
-    return "Please Login"
 
 @app.route('/update/<listing_id>')
 @flask_login.login_required
@@ -153,6 +155,7 @@ def secret_update(listing_id):
         '_id': ObjectId(listing_id)
     })
     return "Please Login"
+
 
 @app.route('/delete/<listing_id>')
 @flask_login.login_required
@@ -169,12 +172,15 @@ def secret_delete(listing_id):
 def show_index():
     return render_template("index.html")
 
+
 @app.route("/all_listings")
 def show_all_listings():
     listings = db.listings.find()
     return render_template("all_listings.template.html", listings=listings)
 
 # Create a listing page
+
+
 @app.route("/create")
 def show_create():
     car_brand = db.brands.find()
@@ -196,7 +202,7 @@ def process_create():
 
     # check for error messages
 
-    #accumulator
+    # accumulator
 
     errors = {}
 
@@ -224,9 +230,9 @@ def process_create():
     # create the query
 
     new_listing = {
-        #'_id' : ObjectId(user_id),
-        #'seller_name' : user_info["name"],
-        #'seller_contact' : user_info["contact"]["phone"],
+        # '_id' : ObjectId(user_id),
+        # 'seller_name' : user_info["name"],
+        # 'seller_contact' : user_info["contact"]["phone"],
         'car': {
             '_id': ObjectId(brand_id),
             'car_brand': car_brand["brand"],
@@ -242,28 +248,32 @@ def process_create():
 
     # execute the query
 
-    db.listings.insert_one(new_listing)
+    inserted_listing = db.listings.insert_one(new_listing)
 
     flash("New listing has been created!", "success")
 
-    return redirect(url_for('show_created'))
+    return redirect(url_for('show_created', inserted_listing_id=inserted_listing.inserted_id))
 
 # Show Created listing
 
 
-@app.route("/created/<listing_id>")
-def show_created(listing_id):
-    new_listing = db.listings.find({}).sort("_id", -1).limit(1)
+@app.route("/created/<inserted_listing_id>")
+def show_created(inserted_listing_id):
+    listing = db.listings.find({
+        '_id': ObjectId(inserted_listing_id)
+    })
     car_brand = db.brands.find()
-    return render_template("created_listing.template.html", new_listing=new_listing)
+    return render_template("created_listing.template.html", listing=listing)
+
 
 @app.route("/updated/<listing_id>")
 def show_updated(listing_id):
-    car_brand =db.brands.find()
+    car_brand = db.brands.find()
     listing = db.listings.find_one({
         '_id': ObjectId(listing_id)
     })
     return render_template("updated_listing.template.html", listing=listing)
+
 
 @app.route("/update/<listing_id>")
 def show_update(listing_id):
@@ -273,6 +283,7 @@ def show_update(listing_id):
     car_brand = db.brands.find()
 
     return render_template("update_listing.template.html", listing=listing, car_brand=car_brand)
+
 
 @app.route("/update/<listing_id>", methods=["POST"])
 def process_update(listing_id):
@@ -313,19 +324,22 @@ def process_update(listing_id):
     })
     return redirect(url_for('show_updated', listing_id=listing_id))
 
+
 @app.route("/delete/<listing_id>")
 def show_delete_listing(listing_id):
     listing = db.listings.find_one({
-        '_id' : ObjectId(listing_id)
+        '_id': ObjectId(listing_id)
     })
     return render_template("delete_listing.template.html", listing=listing)
+
 
 @app.route("/delete/<listing_id>", methods=["POST"])
 def process_delete_listing(listing_id):
     db.listings.remove({
-        '_id' : ObjectId(listing_id)
+        '_id': ObjectId(listing_id)
     })
     return redirect(url_for("show_all_listings"))
+
 
 # "magic code" -- boilerplate
 if __name__ == '__main__':
