@@ -73,7 +73,16 @@
       >
         <div class="card-body">
           <ul class="list-group list-group-flush">
-            
+          {% for l in listing %}
+            <li>Brand: {{l.car.car_brand}}</li>
+            <li>Model: {{l.car.car_model}}</li>
+            <li>Type: {{l.car.car_type}}</li>
+            <li>HorsePower: {{l.car.car_hp}} bhp</li>
+            <li>Condition: {{l.car.car_condition}}</li>
+            <li>Manufactured Year: {{l.car.car_year}}</li>
+            <li>Price: ${{l.car.car_price}}</li>
+            <li>Mileage: {{l.car.car_mileage}} km</li>
+            {%endfor%}
           </ul>
         </div>
       </div>

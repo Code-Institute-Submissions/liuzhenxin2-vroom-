@@ -340,6 +340,27 @@ def process_delete_listing(listing_id):
     })
     return redirect(url_for("show_all_listings"))
 
+@app.route("/search")
+def search():
+    required_listing_name = request.args.get('listing_name') or ''
+    required_country = request.args.get('country') or ''
+
+    # create the query base on the search terms
+    critera = {}
+
+    if required_listing_name:
+        critera['name'] = {
+            '$regex': required_listing_name,
+            '$options': 'i'
+        }
+
+    if required_country:
+        critera['address.country'] = {
+            '$regex': required_country,
+            '$options': 'i'
+        }
+
+
 
 # "magic code" -- boilerplate
 if __name__ == '__main__':
