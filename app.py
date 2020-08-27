@@ -47,7 +47,7 @@ def user_loader(email):
         # store the unique id of the user in the session as `account_id`
         user_object.account_id = user["_id"]
         # return the User object
-        user_object.nickname = user["nickname"]
+        user_object.username = user["username"]
         user_object.phone = user["phone"]
         return user_object
     else:
@@ -71,7 +71,7 @@ def process_register():
     # extract out the email and password
     email = request.form.get('email')
     password = request.form.get('password')
-    nickname = request.form.get('nickname')
+    username = request.form.get('username')
     phone = request.form.get('phone')
 
     # TODO: Vadliate if the email and password are proper
@@ -87,7 +87,7 @@ def process_register():
         db.users.insert_one({
             'email': email,
             'password': pbkdf2_sha256.hash(password),
-            'nickname': nickname,
+            'username': username,
             'phone': phone
         })
 
@@ -233,7 +233,7 @@ def process_create():
     print(flask_login.current_user.account_id)
     new_listing = {
         'seller_id' : flask_login.current_user.account_id,
-        'seller_name' : flask_login.current_user.nickname,
+        'seller_name' : flask_login.current_user.username,
         # 'seller_contact' : flask_login.current_user.phone,
         'car': {
             '_id': ObjectId(brand_id),
