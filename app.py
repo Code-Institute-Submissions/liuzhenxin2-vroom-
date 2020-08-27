@@ -47,6 +47,8 @@ def user_loader(email):
         # store the unique id of the user in the session as `account_id`
         user_object.account_id = user["_id"]
         # return the User object
+        user_object.name = user["name"]
+        user_object.phone = user["phone"]
         return user_object
     else:
         # if the email does not exist in the database, report an error
@@ -228,11 +230,11 @@ def process_create():
     # fetch the info of the user by its ID
 
     # create the query
-
+    print(flask_login.current_user.account_id)
     new_listing = {
-        # '_id' : ObjectId(user_id),
-        # 'seller_name' : user_info["name"],
-        # 'seller_contact' : user_info["contact"]["phone"],
+        'seller_id' : flask_login.current_user.account_id,
+        'seller_name' : flask_login.current_user.name,
+        # 'seller_contact' : flask_login.current_user.phone,
         'car': {
             '_id': ObjectId(brand_id),
             'car_brand': car_brand["brand"],
