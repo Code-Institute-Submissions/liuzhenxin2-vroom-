@@ -122,6 +122,8 @@ def process_login():
         # save the unique id of the user in the session as the property
         # `account_id`
         user_object.account_id = user["_id"]
+
+        user_object.username = user["username"]
         # create the user session
         flask_login.login_user(user_object)
 
@@ -142,30 +144,11 @@ def profile():
     account_id = flask_login.current_user.account_id
     return f"Email = {email}, account_id={account_id}"
 
-
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
     flash('Logged out', 'success')
     return redirect(url_for('login'))
-
-
-@app.route('/update/<listing_id>')
-@flask_login.login_required
-def secret_update(listing_id):
-    db.listings.find_one({
-        '_id': ObjectId(listing_id)
-    })
-    return "Please Login"
-
-
-@app.route('/delete/<listing_id>')
-@flask_login.login_required
-def secret_delete(listing_id):
-    db.listings.find_one({
-        '_id': ObjectId(listing_id)
-    })
-    return "Please Login"
 
 # Main page route
 
@@ -184,12 +167,14 @@ def show_all_listings():
 
 
 @app.route("/create")
+@flask_login.login_required
 def show_create():
     car_brand = db.brands.find()
     return render_template("create_listing.template.html", car_brand=car_brand)
 
 
 @app.route("/create", methods=["POST"])
+@flask_login.login_required
 def process_create():
 
     # retrieve information from the create form
@@ -230,7 +215,6 @@ def process_create():
     # fetch the info of the user by its ID
 
     # create the query
-    print(flask_login.current_user.account_id)
     new_listing = {
         'seller_id' : flask_login.current_user.account_id,
         'seller_name' : flask_login.current_user.username,
@@ -267,27 +251,45 @@ def show_created(inserted_listing_id):
     car_brand = db.brands.find()
     return render_template("created_listing.template.html", listing=listing)
 
-
-@app.route("/updated/<listing_id>")
-def show_updated(listing_id):
-    car_brand = db.brands.find()
-    listing = db.listings.find_one({
-        '_id': ObjectId(listing_id)
+@app.route("/my_listings/<seller_id>")
+@flask_login.login_required
+def show_my_listings(seller_id):
+    listings = db.listings.find({
+        'seller_id': ObjectId(seller_id)
     })
-    return render_template("updated_listing.template.html", listing=listing)
+    if ObjectId(seller_id) == flask_login.current_user.account_id:
+        return render_template("my_listings.template.html", listings = listings)
+    else:
+        return redirect(url_for("show_all_listings"))
 
+@app.route("/seller_listings/<seller_id>")
+@flask_login.login_required
+def show_seller_listings(seller_id):
+    listings = db.listings.find({
+        'seller_id': ObjectId(seller_id)
+    })
+    return render_template("seller_listings.template.html", listings = listings)
 
 @app.route("/update/<listing_id>")
+@flask_login.login_required
 def show_update(listing_id):
     listing = db.listings.find_one({
         '_id': ObjectId(listing_id)
     })
     car_brand = db.brands.find()
-
-    return render_template("update_listing.template.html", listing=listing, car_brand=car_brand)
+    user = db.listings.find_one({
+        '_id': ObjectId(listing_id)
+    })
+    user_id = user['seller_id']
+    if ObjectId(user_id) == flask_login.current_user.account_id:
+        return render_template("update_listing.template.html", listing=listing, car_brand=car_brand)
+    else:
+        return redirect(url_for("show_all_listings"))
+    
 
 
 @app.route("/update/<listing_id>", methods=["POST"])
+@flask_login.login_required
 def process_update(listing_id):
     brand_id = request.form.get("car_brand")
     car_model = request.form.get("car_model")
@@ -326,8 +328,19 @@ def process_update(listing_id):
     })
     return redirect(url_for('show_updated', listing_id=listing_id))
 
+@app.route("/updated/<listing_id>")
+@flask_login.login_required
+def show_updated(listing_id):
+    car_brand = db.brands.find()
+    listing = db.listings.find_one({
+        '_id': ObjectId(listing_id)
+    })
+    return render_template("updated_listing.template.html", listing=listing)
+
+
 
 @app.route("/delete/<listing_id>")
+@flask_login.login_required
 def show_delete_listing(listing_id):
     listing = db.listings.find_one({
         '_id': ObjectId(listing_id)
@@ -336,6 +349,7 @@ def show_delete_listing(listing_id):
 
 
 @app.route("/delete/<listing_id>", methods=["POST"])
+@flask_login.login_required
 def process_delete_listing(listing_id):
     db.listings.remove({
         '_id': ObjectId(listing_id)

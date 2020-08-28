@@ -22,7 +22,7 @@
     </select>
 </div>
 <div>
-    <input type="text" name="car_hp" value="{{previous_values.car_hp}}" placeholder="Horse Power" class="form-control mt-3 w-50">
+    <input type="number" name="car_hp" value="{{previous_values.car_hp}}" min=0 placeholder="Horse Power" class="form-control mt-3 w-50">
 </div>
 <div>
     <select name="car_condition" id="car_condition" class="form-control mt-3 w-50">
@@ -31,11 +31,11 @@
     </select>
 </div>
 <div>
-    <input type="text" name="car_year" placeholder="Manufactured Year" value="{{previous_values.car_year}}" class="form-control mt-3 w-50">
+    <input type="number" name="car_year" placeholder="Manufactured Year" min=1950 value="{{previous_values.car_year}}" class="form-control mt-3 w-50">
 </div>
 <div>    
-    <input type="text" name="car_price" placeholder="Price" value="{{previous_values.car_price}}" class="form-control mt-3 w-50">
+    <input type="number" name="car_price" placeholder="Price" min=0 step="0.01" value="{{previous_values.car_price}}" class="form-control mt-3 w-50">
 </div>
 <div>    
-    <input type="text" name="car_mileage" placeholder="Mileage" value="{{previous_values.car_mileage}}" class="form-control mt-3 w-50">
+    <input type="number" name="car_mileage" placeholder="Mileage" min=0 step="0.01" value="{{previous_values.car_mileage}}" class="form-control mt-3 w-50">
 </div>
