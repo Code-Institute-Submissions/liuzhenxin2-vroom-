@@ -265,6 +265,9 @@ def show_seller_listings(seller_id):
     listings = db.listings.find({
         'seller_id': ObjectId(seller_id)
     })
+    seller_listing = db.listings.find_one({
+        '_id' : ObjectId()
+    })
     return render_template("seller_listings.template.html", listings=listings)
 
 
