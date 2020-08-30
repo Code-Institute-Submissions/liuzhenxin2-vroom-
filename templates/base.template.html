@@ -55,12 +55,26 @@
               >My Store</a
             >
           </li>
-
           <li class="nav-item">
             <a class="nav-link" href="{{url_for('search')}}">Search</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Contact Us</a>
+          </li>
+          <li class="nav-item active" {% if current_user.is_authenticated %}hidden{%endif%}>
+            <a class="nav-link" href="{{url_for('login')}}"
+              >Login</a
+            >
+          </li>
+          <li class="nav-item active" {% if current_user.is_authenticated %}hidden{%endif%}>
+            <a class="nav-link" href="{{url_for('register')}}"
+              >Register</a
+            >
+          </li>
+          <li class="nav-item active" {% if not current_user.is_authenticated %}hidden{%endif%}>
+            <a class="nav-link" href="{{url_for('logout')}}"
+              >Logout</a
+            >
           </li>
         </ul>
       </div>

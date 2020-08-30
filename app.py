@@ -79,10 +79,10 @@ def process_register():
     users = db.users.find_one({
         'email': email
     })
-
     if users:
         flash("Email already exists", "danger")
-        return redirect(url_for('register'))
+        previous_values = request.form.to_dict()
+        return render_template('register.template.html', previous_values=previous_values)
     else:
         # Create the new user
         db.users.insert_one({
@@ -260,7 +260,6 @@ def show_my_listings(seller_id):
 
 
 @app.route("/seller_listings/<seller_id>")
-@flask_login.login_required
 def show_seller_listings(seller_id):
     listings = db.listings.find({
         'seller_id': ObjectId(seller_id)
@@ -383,10 +382,6 @@ def search():
     #         '$options': 'i'
     #     }
 
-    # read in the data
-
-    # get the current page number from the args. If doesn't exist, set to '0'
-
     # calculate how many results to skip depending the page number
 
     if len(critera) != 0:
@@ -405,15 +400,6 @@ def search():
         page_number = 0
         number_of_pages = 0
         number_of_results = 0
-
-        
-
-    # pass the data to the template
-    # return render_template('search.template.html', listings=all_listings,
-    #                        page_number=page_number,
-    #                        number_of_pages=number_of_pages,
-    #                        required_listing_name=required_listing_name,
-    #                        required_country=required_country)
 
     return render_template('search.template.html', listings=listings, page_number=page_number,
                            number_of_pages=number_of_pages,
