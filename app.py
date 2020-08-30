@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from bson.objectid import ObjectId
 import datetime
 from passlib.hash import pbkdf2_sha256
+import math
 
 load_dotenv()
 
@@ -136,14 +137,6 @@ def process_login():
         flash("Wrong email or password", "danger")
         return redirect(url_for('login'))
 
-
-@app.route('/profile')
-@flask_login.login_required
-def profile():
-    email = flask_login.current_user.id
-    account_id = flask_login.current_user.account_id
-    return f"Email = {email}, account_id={account_id}"
-
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
@@ -254,11 +247,12 @@ def show_created(inserted_listing_id):
 @app.route("/my_listings/<seller_id>")
 @flask_login.login_required
 def show_my_listings(seller_id):
+    seller_id = flask_login.current_user.account_id
     listings = db.listings.find({
         'seller_id': ObjectId(seller_id)
     })
     if ObjectId(seller_id) == flask_login.current_user.account_id:
-        return render_template("my_listings.template.html", listings = listings)
+        return render_template("my_listings.template.html", listings = listings, seller_id=ObjectId(seller_id))
     else:
         return redirect(url_for("show_all_listings"))
 
@@ -356,27 +350,61 @@ def process_delete_listing(listing_id):
     })
     return redirect(url_for("show_all_listings"))
 
-@app.route("/search")
+@app.route('/search')
 def search():
-    required_listing_name = request.args.get('listing_name') or ''
-    required_country = request.args.get('country') or ''
+
+    # get all the search terms
+    # reminder: if the method is "GET", we retrieve the fields by accessing
+    # request.args
+    car_seller_name = request.args.get('car_seller_name') or ''
+    car_brand_name = request.args.get('car_brand_name') or ''
+    car_model_name = request.args.get('car_model_name') or ''
+    car_condition = request.args.get('car_condition') or ''
 
     # create the query base on the search terms
     critera = {}
 
-    if required_listing_name:
-        critera['name'] = {
-            '$regex': required_listing_name,
+    if car_seller_name:
+        critera['seller_name'] = {
+            '$regex': car_seller_name,
             '$options': 'i'
         }
 
-    if required_country:
-        critera['address.country'] = {
-            '$regex': required_country,
-            '$options': 'i'
-        }
+    # if required_country:
+    #     critera['address.country'] = {
+    #         '$regex': required_country,
+    #         '$options': 'i'
+    #     }
 
+    # read in the data
+    number_of_results = client[DB_NAME].listings.find(
+        critera).count()
+    page_size = 10
+    number_of_pages = math.ceil(number_of_results / page_size) - 1
 
+    # get the current page number from the args. If doesn't exist, set to '0'
+    page_number = request.args.get('page_number') or '0'
+    page_number = int(page_number)
+
+    # calculate how many results to skip depending the page number
+    number_to_skip = page_number * page_size
+
+    if len(critera) != 0:
+        listings = client[DB_NAME].listings.find(
+            critera).skip(number_to_skip).limit(page_size)
+    else:
+        listings = []
+
+    # pass the data to the template
+    # return render_template('search.template.html', listings=all_listings,
+    #                        page_number=page_number,
+    #                        number_of_pages=number_of_pages,
+    #                        required_listing_name=required_listing_name,
+    #                        required_country=required_country)
+
+    return render_template('search.template.html', listings=listings, page_number=page_number,
+                           number_of_pages=number_of_pages,
+                           car_seller_name=car_seller_name)
 
 # "magic code" -- boilerplate
 if __name__ == '__main__':
