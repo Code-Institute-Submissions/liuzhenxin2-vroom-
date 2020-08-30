@@ -18,7 +18,6 @@
   />
   <input type="submit" value="Search" class="btn btn-primary" />
 </form>
-    <h3>Results</h3>
     {% if page_number < number_of_pages %}
     <a
     href="{{ url_for('search', page_number=page_number+1, car_seller_name=car_seller_name ) }}"
@@ -93,7 +92,7 @@
         <h5 class="card-title">Sold By:</h5>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
-            <a href="#">{{each_listing.seller_name}}</a>
+            <a href="{{url_for('show_seller_listings', seller_id=each_listing.seller_id)}}">{{each_listing.seller_name}}</a>
             </li>
         </ul>
 
