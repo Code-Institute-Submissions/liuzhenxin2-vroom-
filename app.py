@@ -137,6 +137,7 @@ def process_login():
         flash("Wrong email or password", "danger")
         return redirect(url_for('login'))
 
+
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
@@ -209,8 +210,8 @@ def process_create():
 
     # create the query
     new_listing = {
-        'seller_id' : flask_login.current_user.account_id,
-        'seller_name' : flask_login.current_user.username,
+        'seller_id': flask_login.current_user.account_id,
+        'seller_name': flask_login.current_user.username,
         # 'seller_contact' : flask_login.current_user.phone,
         'car': {
             '_id': ObjectId(brand_id),
@@ -244,6 +245,7 @@ def show_created(inserted_listing_id):
     car_brand = db.brands.find()
     return render_template("created_listing.template.html", listing=listing)
 
+
 @app.route("/my_listings/<seller_id>")
 @flask_login.login_required
 def show_my_listings(seller_id):
@@ -252,9 +254,10 @@ def show_my_listings(seller_id):
         'seller_id': ObjectId(seller_id)
     })
     if ObjectId(seller_id) == flask_login.current_user.account_id:
-        return render_template("my_listings.template.html", listings = listings, seller_id=ObjectId(seller_id))
+        return render_template("my_listings.template.html", listings=listings, seller_id=ObjectId(seller_id))
     else:
         return redirect(url_for("show_all_listings"))
+
 
 @app.route("/seller_listings/<seller_id>")
 @flask_login.login_required
@@ -262,7 +265,8 @@ def show_seller_listings(seller_id):
     listings = db.listings.find({
         'seller_id': ObjectId(seller_id)
     })
-    return render_template("seller_listings.template.html", listings = listings)
+    return render_template("seller_listings.template.html", listings=listings)
+
 
 @app.route("/update/<listing_id>")
 @flask_login.login_required
@@ -279,7 +283,6 @@ def show_update(listing_id):
         return render_template("update_listing.template.html", listing=listing, car_brand=car_brand)
     else:
         return redirect(url_for("show_all_listings"))
-    
 
 
 @app.route("/update/<listing_id>", methods=["POST"])
@@ -322,6 +325,7 @@ def process_update(listing_id):
     })
     return redirect(url_for('show_updated', listing_id=listing_id))
 
+
 @app.route("/updated/<listing_id>")
 @flask_login.login_required
 def show_updated(listing_id):
@@ -330,7 +334,6 @@ def show_updated(listing_id):
         '_id': ObjectId(listing_id)
     })
     return render_template("updated_listing.template.html", listing=listing)
-
 
 
 @app.route("/delete/<listing_id>")
@@ -349,6 +352,7 @@ def process_delete_listing(listing_id):
         '_id': ObjectId(listing_id)
     })
     return redirect(url_for("show_all_listings"))
+
 
 @app.route('/search')
 def search():
@@ -377,23 +381,29 @@ def search():
     #     }
 
     # read in the data
-    number_of_results = client[DB_NAME].listings.find(
-        critera).count()
-    page_size = 10
-    number_of_pages = math.ceil(number_of_results / page_size) - 1
 
     # get the current page number from the args. If doesn't exist, set to '0'
-    page_number = request.args.get('page_number') or '0'
-    page_number = int(page_number)
 
     # calculate how many results to skip depending the page number
-    number_to_skip = page_number * page_size
 
     if len(critera) != 0:
+        number_of_results = client[DB_NAME].listings.find(
+            critera).count()
+        page_size = 1
+        number_of_pages = math.ceil(number_of_results / page_size) - 1
+        page_number = request.args.get('page_number') or '0'
+        page_number = int(page_number)
+        number_to_skip = page_number * page_size
         listings = client[DB_NAME].listings.find(
             critera).skip(number_to_skip).limit(page_size)
+
     else:
         listings = []
+        page_number = 0
+        number_of_pages = 0
+        number_of_results = 0
+
+        
 
     # pass the data to the template
     # return render_template('search.template.html', listings=all_listings,
@@ -404,7 +414,9 @@ def search():
 
     return render_template('search.template.html', listings=listings, page_number=page_number,
                            number_of_pages=number_of_pages,
-                           car_seller_name=car_seller_name)
+                           car_seller_name=car_seller_name,
+                           number_of_results=number_of_results)
+
 
 # "magic code" -- boilerplate
 if __name__ == '__main__':
