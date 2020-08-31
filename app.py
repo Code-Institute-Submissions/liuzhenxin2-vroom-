@@ -265,7 +265,7 @@ def show_seller_listings(seller_id):
         'seller_id': ObjectId(seller_id)
     })
     seller_listing = db.listings.find_one({
-        '_id' : ObjectId()
+        '_id': ObjectId()
     })
     return render_template("seller_listings.template.html", listings=listings)
 
@@ -376,11 +376,10 @@ def search():
             '$options': 'i'
         }
 
-    # if required_country:
-    #     critera['address.country'] = {
-    #         '$regex': required_country,
-    #         '$options': 'i'
-    #     }
+    if car_brand_name:
+        critera['brand'] = {
+
+        }
 
     # calculate how many results to skip depending the page number
 

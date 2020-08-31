@@ -2,21 +2,23 @@
 <h3>Search for your dream car:</h3>
 
 <form method="GET" class="form-inline">
+{%with%}
+    {%if not previous_values %}
+        {%set previous_values = {} %}
+    {%endif%}
   <input
     type="text"
     name="car_seller_name"
-    class="form-control mr-2"
+    class="form-control mr-3"
     value="{{car_seller_name}}"
     placeholder="Enter seller name"
   />
-  <input
-    type="text"
-    name="country"
-    class="form-control mr-2"
-    value="{{required_country}}"
-    placeholder="Enter country"
-  />
-  <input type="submit" value="Search" class="btn btn-primary" />
+    <select name="car_brand_name" class="form-control">
+    {%for car_brand in brands %}
+       <option value="{{each_brand._id}}" {%if previous_values and each_brand._id==previous_values._id%} selected {%endif%}>{{each_brand.brand}}</option>
+    {%endfor%}
+    </select>
+  <input type="submit" value="Search" class="btn btn-primary ml-3" />
 </form>
     {% if page_number < number_of_pages %}
     <a
@@ -154,5 +156,5 @@
     {%endfor%}
     </div>
 
-
+{%endwith%}
 {% endblock%}
