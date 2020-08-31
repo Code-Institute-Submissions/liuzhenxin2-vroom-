@@ -1,48 +1,73 @@
 {% extends 'base.template.html' %} {% block content %}
-<h3>Search for your dream car:</h3>
+<h3 class="text-center">Your dream car is just a few clicks away!</h3>
 
 <form method="GET" class="form-inline">
 {%with%}
     {%if not previous_values %}
         {%set previous_values = {} %}
     {%endif%}
-  <input
-    type="text"
-    name="car_seller_name"
-    class="form-control mr-3"
-    value="{{car_seller_name}}"
-    placeholder="Enter seller name"
-  />
-    <select name="car_brand_name" class="form-control">
-        <option value="default">Select a car brand</option>
+    <select name="car_brand_name" class="form-control mt-3 w-100">
+        <option value="" {%if previous_values.car_condition == "" %} selected {%endif%}>Select a car brand</option>
     {%for each_brand in car_brands %}
        <option value="{{each_brand.brand}}" {%if previous_values and each_brand.brand==previous_values.brand%} selected {%endif%}>{{each_brand.brand}}</option>
     {%endfor%}
     </select>
-  <input type="submit" value="Search" class="btn btn-primary ml-3" />
+    <input
+    type="text"
+    name="car_model_name"
+    class="form-control mt-3 w-100"
+    value="{{car_model_name}}"
+    placeholder="Enter car model"
+    />
+    <select name="search_car_condition" class="form-control mt-3 w-100">
+        <option value="" {%if previous_values.car_condition == "" %} selected {%endif%}>Car condition</option>
+        <option value="New" {%if previous_values.car_condition == "New" %} selected {%endif%}>New</option>
+        <option value="Used" {%if previous_values.car_condition == "Used" %} selected {%endif%}>Used</option>
+    </select>
+    <input
+        type="text"
+        name="car_seller_name"
+        class="form-control mt-3 w-100"
+        value="{{car_seller_name}}"
+        placeholder="Enter seller name"
+    />
+  <input type="submit" value="Search" class="btn btn-primary mt-3 mb-5 w-100" />
 </form>
-    {% if page_number < number_of_pages %}
-    <a
-    href="{{ url_for('search', page_number=page_number+1, car_seller_name=car_seller_name ) }}"
-    >Next Page</a
-    >
-    {% endif%} 
-    {% for page_no in range(number_of_pages+1) %}
-    {%if number_of_results > 0 %}
-    <a
-    href="{{ url_for('search', page_number=page_no, car_seller_name=car_seller_name ) }}"
-    >{{page_no+1}}</a
-    >
-    {%endif%}
-    {% endfor %} {% if page_number >= 1 %}
-    <a class="disabled"
-    href="{{ url_for('search', page_number=page_number-1, car_seller_name=car_seller_name) }}"
-    aria-disabled="true">Previous Page</a
-    >
-    {%endif%}
+    <nav>
+        <ul class="pagination d-flex justify-content-center">
+            {% if page_number >= 1 %}
+                <li class="page-item">
+                    <a class="page-link"
+                    href="{{ url_for('search', page_number=page_number-1, car_seller_name=car_seller_name) }}"
+                    >Previous Page</a>
+                </li>
+            {%endif%}
+            {% for page_no in range(number_of_pages+1) %}
+                {%if number_of_results > 0 %}
+                    <li class="page-item">
+                        <a
+                        href="{{ url_for('search', page_number=page_no, car_seller_name=car_seller_name ) }}"
+                        class="page-link">{{page_no+1}}</a>
+                    </li>
+                {%endif%}
+            {% endfor %} 
+            {% if page_number < number_of_pages %}
+                <li class="page-item">
+                    <a
+                    href="{{ url_for('search', page_number=page_number+1, car_seller_name=car_seller_name ) }}"
+                    class="page-link">Next Page</a>
+                </li>
+            {% endif%} 
+        </ul>
+    </nav>
     <div
     class="row row-cols-1 row-cols-md-3 d-flex justify-content-around align-items-start"
     >
+
+    {%if number_of_results==0 %}
+        
+    {%endif%}
+
     {% for each_listing in listings %}
     <div
         class="card"

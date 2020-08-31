@@ -363,9 +363,9 @@ def search():
     # reminder: if the method is "GET", we retrieve the fields by accessing
     # request.args
     car_seller_name = request.args.get('car_seller_name') or ''
-    car_brand_name = request.args.get('car_brand_name') or 'default'
+    car_brand_name = request.args.get('car_brand_name') or ''
     car_model_name = request.args.get('car_model_name') or ''
-    car_condition = request.args.get('car_condition') or ''
+    car_condition = request.args.get('search_car_condition') or ''
     car_brands = db.brands.find()
     car_brand = db.brands.find_one({
         'brand': car_brand_name
@@ -384,7 +384,15 @@ def search():
 
     if car_brand_name:
         criteria['car.car_brand'] = car_brand_name
-        
+
+    if car_model_name:
+        criteria['car.car_model'] = {
+            '$regex': car_model_name,
+            '$options': 'i'
+        }
+
+    if car_condition:
+        criteria['car.car_condition'] = car_condition
 
     # calculate how many results to skip depending the page number
 
@@ -411,7 +419,8 @@ def search():
                            number_of_results=number_of_results,
                            car_brand=car_brand,
                            car_brands=car_brands,
-                           previous_values=previous_values)
+                           previous_values=previous_values,
+                           car_model_name=car_model_name)
 
 
 # "magic code" -- boilerplate
