@@ -1,6 +1,10 @@
 {% extends "base.template.html" %} 
 
 {% block content %}
+<div>
+<a href="{{url_for('show_all_listings')}}" class="btn btn-primary w-100 mb-5">Back to all listings</a>
+</div>
+
 <div class="row row-cols-1 row-cols-md-3 d-flex justify-content-around align-items-start">
 {% for each_listing in listings %}
         <div class="card" style= "margin: 2%; border: 2px white solid; box-shadow: 5px 5px;">

@@ -142,7 +142,7 @@ def process_login():
 def logout():
     flask_login.logout_user()
     flash('Logged out', 'success')
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 # Main page route
 

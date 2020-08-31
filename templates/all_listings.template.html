@@ -1,6 +1,9 @@
 {% extends "base.template.html" %} 
 
 {% block content %}
+<div>
+    <a href="{{url_for('show_create')}}" class="btn btn-primary mb-5 w-100">Create Your Listing</a>
+</div>
 <div class="row row-cols-1 row-cols-md-3 d-flex justify-content-around align-items-start">
 {% for each_listing in listings %}
         <div class="card" style= "margin: 2%; border: 2px white solid; box-shadow: 5px 5px;">
@@ -51,7 +54,7 @@
         <div class="card-body">
             <h5 class="card-title">Sold By:</h5>
             <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="{{url_for('show_seller_listings', seller_id=each_listing.seller_id)}}">{{each_listing.seller_name}}</a></li>
+            <li class="list-group-item"><a href="{{url_for('show_seller_listings', seller_id=each_listing.seller_id)}}" class="btn btn-warning w-100">{{each_listing.seller_name}}</a></li>
             </ul>
             <div id="accordion_{{each_listing._id}}">
             <div class="card">
