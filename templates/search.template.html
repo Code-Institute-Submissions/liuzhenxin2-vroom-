@@ -14,8 +14,9 @@
     placeholder="Enter seller name"
   />
     <select name="car_brand_name" class="form-control">
-    {%for car_brand in brands %}
-       <option value="{{each_brand._id}}" {%if previous_values and each_brand._id==previous_values._id%} selected {%endif%}>{{each_brand.brand}}</option>
+        <option value="default">Select a car brand</option>
+    {%for each_brand in car_brands %}
+       <option value="{{each_brand.brand}}" {%if previous_values and each_brand.brand==previous_values.brand%} selected {%endif%}>{{each_brand.brand}}</option>
     {%endfor%}
     </select>
   <input type="submit" value="Search" class="btn btn-primary ml-3" />

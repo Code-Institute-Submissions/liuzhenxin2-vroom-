@@ -363,36 +363,41 @@ def search():
     # reminder: if the method is "GET", we retrieve the fields by accessing
     # request.args
     car_seller_name = request.args.get('car_seller_name') or ''
-    car_brand_name = request.args.get('car_brand_name') or ''
+    car_brand_name = request.args.get('car_brand_name') or 'default'
     car_model_name = request.args.get('car_model_name') or ''
     car_condition = request.args.get('car_condition') or ''
+    car_brands = db.brands.find()
+    car_brand = db.brands.find_one({
+        'brand': car_brand_name
+    })
+
+    previous_values = car_brand
 
     # create the query base on the search terms
-    critera = {}
+    criteria = {}
 
     if car_seller_name:
-        critera['seller_name'] = {
+        criteria['seller_name'] = {
             '$regex': car_seller_name,
             '$options': 'i'
         }
 
     if car_brand_name:
-        critera['brand'] = {
-
-        }
+        criteria['car.car_brand'] = car_brand_name
+        
 
     # calculate how many results to skip depending the page number
 
-    if len(critera) != 0:
-        number_of_results = client[DB_NAME].listings.find(
-            critera).count()
+    if len(criteria) != 0:
+        number_of_results = db.listings.find(
+            criteria).count()
         page_size = 1
         number_of_pages = math.ceil(number_of_results / page_size) - 1
         page_number = request.args.get('page_number') or '0'
         page_number = int(page_number)
         number_to_skip = page_number * page_size
-        listings = client[DB_NAME].listings.find(
-            critera).skip(number_to_skip).limit(page_size)
+        listings = db.listings.find(
+            criteria).skip(number_to_skip).limit(page_size)
 
     else:
         listings = []
@@ -403,7 +408,10 @@ def search():
     return render_template('search.template.html', listings=listings, page_number=page_number,
                            number_of_pages=number_of_pages,
                            car_seller_name=car_seller_name,
-                           number_of_results=number_of_results)
+                           number_of_results=number_of_results,
+                           car_brand=car_brand,
+                           car_brands=car_brands,
+                           previous_values=previous_values)
 
 
 # "magic code" -- boilerplate
