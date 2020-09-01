@@ -54,7 +54,7 @@
         <div class="card-body">
             <h5 class="card-title">Sold By:</h5>
             <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="#">{{each_listing.seller_name}}</a></li>
+            <li class="list-group-item p-0 mb-3"><a href="{{url_for('show_seller_listings', seller_id=each_listing.seller_id)}}" class="btn btn-warning w-100">{{each_listing.seller_name}}</a></li>
             </ul>
 
             <div id="accordion_{{each_listing._id}}">

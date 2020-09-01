@@ -7,6 +7,7 @@ from bson.objectid import ObjectId
 import datetime
 from passlib.hash import pbkdf2_sha256
 import math
+import re
 
 load_dotenv()
 
@@ -75,14 +76,53 @@ def process_register():
     username = request.form.get('username')
     phone = request.form.get('phone')
 
+    # store the register errors
+
+    user_errors = {}
+
+    # check if user entered special characters in password
+
+    special_char_filter = '[\w\s]'
+
+    special_char = re.sub(special_char_filter,'',password)
+
+    # check if password has spacing
+
+    spacing_filter = '[^\s]'
+
+    password_spacing = re.sub(spacing_filter, '', password)
+
+    if len(password) < 8:
+        user_errors.update(
+            password_too_short="Please key in at least 8 characters for password.")
+
+    if special_char == '':
+        user_errors.update(
+            password_no_special="Password must contain at least 1 special character. E.g !,@,#"
+        )
+
+    if password_spacing != '':
+        user_errors.update(
+            password_no_spacing="Password must not have spacing."
+        )  
+
+    if len(user_errors) > 0:
+        car_brand = db.brands.find()
+        flash("Unable to register", "danger")
+        previous_values = request.form.to_dict()
+        return render_template("register.template.html", user_errors=user_errors, previous_values=previous_values)
+
     # TODO: Vadliate if the email and password are proper
     users = db.users.find_one({
         'email': email
     })
+
+
+
     if users:
         flash("Email already exists", "danger")
         previous_values = request.form.to_dict()
-        return render_template('register.template.html', previous_values=previous_values)
+        return render_template('register.template.html', previous_values=previous_values, user_errors=user_errors)
     else:
         # Create the new user
         db.users.insert_one({
@@ -431,16 +471,15 @@ def search():
 
     else:
         listings = []
-        page_number = 0
-        number_of_pages = 0
-        number_of_results = 0
+        page_number = ''
+        number_of_pages = ''
+        number_of_results = ''
 
     return render_template('search.template.html', listings=listings, 
                            page_number=page_number,
                            number_of_pages=number_of_pages,
                            car_seller_name=car_seller_name,
                            number_of_results=number_of_results,
-                           car_brand=car_brand,
                            car_brands=car_brands,
                            previous_values=previous_values,
                            car_model_name=car_model_name,

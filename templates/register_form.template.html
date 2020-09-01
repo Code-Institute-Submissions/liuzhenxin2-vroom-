@@ -1,8 +1,17 @@
 <div>
-    <input type="text" class="form-control mb-3" placeholder="Email" value="{{previous_values.email}}" name="email"/>
+    <input type="text" class="form-control mb-3"  placeholder="Email" value="{{previous_values.email}}" name="email"/>
 </div>
 <div>
-    <input type="password" class="form-control mb-3" placeholder="Password" value="{{previous_values.password}}" name="password"/>
+    <input type="password" class="form-control mb-3 w-100 {%if 'password_too_short' or 'password_no_special' or 'password_no_spacing' in user_errors %} is-invalid {%endif%}" placeholder="Password" value="{{previous_values.password}}" name="password"/>
+    <div class="invalid-feedback">
+        {{user_errors.password_too_short}}
+    </div>
+    <div class="invalid-feedback">
+        {{user_errors.password_no_special}}
+    </div>
+    <div class="invalid-feedback mb-3">
+        {{user_errors.password_no_spacing}}
+    </div>
 </div>
 <div>
     <input type="text" class="form-control mb-3" placeholder="Displayed Name" value="{{previous_values.username}}" name="username"/>

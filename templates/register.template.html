@@ -8,6 +8,9 @@
     {%if not previous_values %}
         {%set previous_values = {} %}
     {%endif%}
+    {%if not user_errors %}
+        {%set user_errors = {} %}
+    {%endif%}
 
     {% include "register_form.template.html" %}
 {%endwith%}
