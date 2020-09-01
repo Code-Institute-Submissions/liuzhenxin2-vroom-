@@ -6,8 +6,11 @@
     {%if not previous_values %}
         {%set previous_values = {} %}
     {%endif%}
+    {%if not previous_values_condition %}
+        {%set previous_values_condition = {} %}
+    {%endif%}
     <select name="car_brand_name" class="form-control mt-3 w-100">
-        <option value="" {%if previous_values.car_condition == "" %} selected {%endif%}>Select a car brand</option>
+        <option value="" {%if previous_values.car_brand_name == "" %} selected {%endif%}>Select a car brand</option>
     {%for each_brand in car_brands %}
        <option value="{{each_brand.brand}}" {%if previous_values and each_brand.brand==previous_values.brand%} selected {%endif%}>{{each_brand.brand}}</option>
     {%endfor%}
@@ -20,9 +23,9 @@
     placeholder="Enter car model"
     />
     <select name="search_car_condition" class="form-control mt-3 w-100">
-        <option value="" {%if previous_values.car_condition == "" %} selected {%endif%}>Car condition</option>
-        <option value="New" {%if previous_values.car_condition == "New" %} selected {%endif%}>New</option>
-        <option value="Used" {%if previous_values.car_condition == "Used" %} selected {%endif%}>Used</option>
+        <option value="" {%if previous_values_condition == "" %} selected {%endif%}>Car condition</option>
+        <option value="New" {%if previous_values_condition == "New" %} selected {%endif%}>New</option>
+        <option value="Used" {%if previous_values_condition == "Used" %} selected {%endif%}>Used</option>
     </select>
     <input
         type="text"
@@ -31,157 +34,157 @@
         value="{{car_seller_name}}"
         placeholder="Enter seller name"
     />
-  <input type="submit" value="Search" class="btn btn-primary mt-3 w-100" />
-  <a href="{{url_for('show_all_listings')}}" value="Cancel" class="btn btn-danger form-control mt-3 mb-5 w-100">Cancel</a>
+  <input type="submit" value="Search" class="btn btn-primary mt-3 w-100" style="font-weight: bold;"/>
+  <a href="{{url_for('show_all_listings')}}" value="Cancel" class="btn btn-danger form-control mt-3 mb-5 w-100"><b>Cancel</b></a>
 </form>
-    <nav>
-        <ul class="pagination d-flex justify-content-center">
-            {% if page_number >= 1 %}
-                <li class="page-item">
-                    <a class="page-link"
-                    href="{{ url_for('search', page_number=page_number-1, car_seller_name=car_seller_name) }}"
-                    >Previous Page</a>
-                </li>
-            {%endif%}
-            {% for page_no in range(number_of_pages+1) %}
-                {%if number_of_results > 0 %}
-                    <li class="page-item">
-                        <a
-                        href="{{ url_for('search', page_number=page_no, car_seller_name=car_seller_name ) }}"
-                        class="page-link">{{page_no+1}}</a>
-                    </li>
-                {%endif%}
-            {% endfor %} 
-            {% if page_number < number_of_pages %}
+<nav>
+    <ul class="pagination d-flex justify-content-center">
+        {% if page_number >= 1 %}
+            <li class="page-item">
+                <a class="page-link"
+                href="{{ url_for('search', page_number=page_number-1, car_seller_name=car_seller_name, car_condition=car_condition, car_brand_name=car_brand_name, car_model_name=car_model_name) }}"
+                >Previous Page</a>
+            </li>
+        {%endif%}
+        {% for page_no in range(number_of_pages+1) %}
+            {%if number_of_results > 0 %}
                 <li class="page-item">
                     <a
-                    href="{{ url_for('search', page_number=page_number+1, car_seller_name=car_seller_name ) }}"
-                    class="page-link">Next Page</a>
+                    href="{{ url_for('search', page_number=page_no, car_seller_name=car_seller_name, car_condition=car_condition, car_brand_name=car_brand_name, car_model_name=car_model_name) }}"
+                    class="page-link">{{page_no+1}}</a>
                 </li>
-            {% endif%} 
-        </ul>
-    </nav>
-    <div
-    class="row row-cols-1 row-cols-md-3 d-flex justify-content-around align-items-start"
-    >
-
-    {%if number_of_results==0 %}
-        
-    {%endif%}
-
-    {% for each_listing in listings %}
-    <div
-        class="card"
-        style="margin: 2%; border: 2px white solid; box-shadow: 5px 5px;"
-    >
-        <div id="carouselControls" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-            <img
-                src="{{url_for('static', filename='pictures/index-main-background.jpg')}}"
-                class="w-100"
-                alt="..."
-            />
-            </div>
-            <div class="carousel-item">
-            <img
-                src="{{url_for('static', filename='pictures/index-main-background.jpg')}}"
-                class="w-100"
-                alt="..."
-            />
-            </div>
-            <div class="carousel-item">
-            <img
-                src="{{url_for('static', filename='pictures/index-main-background.jpg')}}"
-                class="w-100"
-                alt="..."
-            />
-            </div>
-        </div>
-        <a
-            class="carousel-control-prev"
-            href="#carouselControls"
-            role="button"
-            data-slide="prev"
-        >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a
-            class="carousel-control-next"
-            href="#carouselControls"
-            role="button"
-            data-slide="next"
-        >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-        </div>
-        <div class="card-body">
-        <h5 class="card-title">Sold By:</h5>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-            <a href="{{url_for('show_seller_listings', seller_id=each_listing.seller_id)}}">{{each_listing.seller_name}}</a>
+            {%endif%}
+        {% endfor %} 
+        {% if page_number < number_of_pages %}
+            <li class="page-item">
+                <a
+                href="{{ url_for('search', page_number=page_number+1, car_seller_name=car_seller_name, car_condition=car_condition, car_brand_name=car_brand_name, car_model_name=car_model_name) }}"
+                class="page-link">Next Page</a>
             </li>
-        </ul>
+        {% endif%} 
+    </ul>
+</nav>
+<div
+class="row row-cols-1 row-cols-md-3 d-flex justify-content-around align-items-start"
+>
 
-        <div id="accordion_{{each_listing._id}}">
-            <div class="card">
-            <div class="card-header" id="car_header_details_{{each_listing._id}}">
-                <h5 class="mb-0">
-                <button
-                    class="btn btn-link"
-                    data-toggle="collapse"
-                    data-target="#car_details_{{each_listing._id}}"
-                    aria-expanded="false"
-                    aria-controls="car_details_{{each_listing._id}}"
-                >
-                    Car Details
-                </button>
-                </h5>
-            </div>
+{%if number_of_results==0 %}
+    
+{%endif%}
 
-            <div
-                id="car_details_{{each_listing._id}}"
-                class="collapse"
-                aria-labelledby="car_header_details_{{each_listing._id}}"
-                data-parent="#accordion_{{each_listing._id}}"
+{% for each_listing in listings %}
+<div
+    class="card"
+    style="margin: 2%; border: 2px white solid; box-shadow: 5px 5px;"
+>
+    <div id="carouselControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+        <img
+            src="{{url_for('static', filename='pictures/index-main-background.jpg')}}"
+            class="w-100"
+            alt="..."
+        />
+        </div>
+        <div class="carousel-item">
+        <img
+            src="{{url_for('static', filename='pictures/index-main-background.jpg')}}"
+            class="w-100"
+            alt="..."
+        />
+        </div>
+        <div class="carousel-item">
+        <img
+            src="{{url_for('static', filename='pictures/index-main-background.jpg')}}"
+            class="w-100"
+            alt="..."
+        />
+        </div>
+    </div>
+    <a
+        class="carousel-control-prev"
+        href="#carouselControls"
+        role="button"
+        data-slide="prev"
+    >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a
+        class="carousel-control-next"
+        href="#carouselControls"
+        role="button"
+        data-slide="next"
+    >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+    </div>
+    <div class="card-body">
+    <h5 class="card-title">Sold By:</h5>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+        <a href="{{url_for('show_seller_listings', seller_id=each_listing.seller_id)}}">{{each_listing.seller_name}}</a>
+        </li>
+    </ul>
+
+    <div id="accordion_{{each_listing._id}}">
+        <div class="card">
+        <div class="card-header" id="car_header_details_{{each_listing._id}}">
+            <h5 class="mb-0">
+            <button
+                class="btn btn-link"
+                data-toggle="collapse"
+                data-target="#car_details_{{each_listing._id}}"
+                aria-expanded="false"
+                aria-controls="car_details_{{each_listing._id}}"
             >
-                <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                    Brand: {{each_listing.car.car_brand}}
-                    </li>
-                    <li class="list-group-item">
-                    Model: {{each_listing.car.car_model}}
-                    </li>
-                    <li class="list-group-item">
-                    Car Type: {{each_listing.car.car_type}}
-                    </li>
-                    <li class="list-group-item">
-                    Horse Power: {{each_listing.car.car_hp}} bhp
-                    </li>
-                    <li class="list-group-item">
-                    Condition: {{each_listing.car.car_condition}}
-                    </li>
-                    <li class="list-group-item">
-                    Year Manufactured: {{each_listing.car.car_year}}
-                    </li>
-                    <li class="list-group-item">
-                    Asking Price: ${{each_listing.car.car_price}}
-                    </li>
-                    <li class="list-group-item">
-                    Mileage: {{each_listing.car.car_mileage}} Km
-                    </li>
-                </ul>
-                </div>
-            </div>
+                Car Details
+            </button>
+            </h5>
+        </div>
+
+        <div
+            id="car_details_{{each_listing._id}}"
+            class="collapse"
+            aria-labelledby="car_header_details_{{each_listing._id}}"
+            data-parent="#accordion_{{each_listing._id}}"
+        >
+            <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                Brand: {{each_listing.car.car_brand}}
+                </li>
+                <li class="list-group-item">
+                Model: {{each_listing.car.car_model}}
+                </li>
+                <li class="list-group-item">
+                Car Type: {{each_listing.car.car_type}}
+                </li>
+                <li class="list-group-item">
+                Horse Power: {{each_listing.car.car_hp}} bhp
+                </li>
+                <li class="list-group-item">
+                Condition: {{each_listing.car.car_condition}}
+                </li>
+                <li class="list-group-item">
+                Year Manufactured: {{each_listing.car.car_year}}
+                </li>
+                <li class="list-group-item">
+                Asking Price: ${{each_listing.car.car_price}}
+                </li>
+                <li class="list-group-item">
+                Mileage: {{each_listing.car.car_mileage}} Km
+                </li>
+            </ul>
             </div>
         </div>
         </div>
     </div>
-    {%endfor%}
     </div>
+</div>
+{%endfor%}
+</div>
 
 {%endwith%}
 {% endblock%}

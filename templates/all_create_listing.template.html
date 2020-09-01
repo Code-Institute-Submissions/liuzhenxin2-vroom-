@@ -10,7 +10,7 @@
 <div>    
     <input type="text" name="car_model" value="{{previous_values.car_model}}" placeholder="Car Model" class="form-control mt-3 w-100 {%if 'model_too_short' in errors %} is-invalid {%endif%}">
     <div class="invalid-feedback">
-        {{errors}}
+        {{errors.model_too_short}}
     </div>
 </div>
 <div>    

@@ -372,6 +372,7 @@ def search():
     })
 
     previous_values = car_brand
+    previous_values_condition = car_condition
 
     # create the query base on the search terms
     criteria = {}
@@ -400,7 +401,7 @@ def search():
         number_of_results = db.listings.find(
             criteria).count()
         page_size = 1
-        number_of_pages = math.ceil(number_of_results / page_size) - 1
+        number_of_pages = math.ceil(number_of_results / page_size)-1
         page_number = request.args.get('page_number') or '0'
         page_number = int(page_number)
         number_to_skip = page_number * page_size
@@ -413,14 +414,17 @@ def search():
         number_of_pages = 0
         number_of_results = 0
 
-    return render_template('search.template.html', listings=listings, page_number=page_number,
+    return render_template('search.template.html', listings=listings, 
+                           page_number=page_number,
                            number_of_pages=number_of_pages,
                            car_seller_name=car_seller_name,
                            number_of_results=number_of_results,
                            car_brand=car_brand,
                            car_brands=car_brands,
                            previous_values=previous_values,
-                           car_model_name=car_model_name)
+                           car_model_name=car_model_name,
+                           car_condition=car_condition,
+                           previous_values_condition=previous_values_condition)
 
 
 # "magic code" -- boilerplate
