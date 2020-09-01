@@ -7,6 +7,9 @@
 <form method="POST">
 {%with %}
     {%set previous_values=listing.car %}
+    {%if not errors %}
+        {%set errors = {} %}
+    {%endif%}
     {% include 'all_create_listing.template.html' %}
 {%endwith%}
 <input type="submit" value="Update" class="btn btn-primary mt-3 w-100"/>

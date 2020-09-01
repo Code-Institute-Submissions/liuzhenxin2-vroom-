@@ -172,7 +172,7 @@ def show_create():
 def process_create():
 
     # retrieve information from the create form
-    brand_id = request.form.get("car_brand")
+    car_brand = request.form.get("car_brand")
     car_model = request.form.get("car_model")
     car_type = request.form.get("car_type")
     car_hp = request.form.get("car_hp")
@@ -187,23 +187,44 @@ def process_create():
 
     errors = {}
 
+    # check if car brand is selected
+
+    if car_brand =='':
+        errors.update(
+            car_brand_required='Please select a car brand.'
+        )
+
     # check if name of car brand has at least 2 letters
 
     if len(car_model) < 2:
         errors.update(
             model_too_short="Please key in at least 2 letters for car model.")
 
+    # check if car model has invalid characters in it
+
+    if ','or'.'or'!'or'@'or'#'or'$'or'%'or'^'or'&'or'*'or'('or')'or'+'or'='or'-'or'_'or'?'or'>'or'<'or';'or':'in car_model:
+        errors.update(
+            model_invalid_character= "Only numbers and alphabets are allowed in this field."
+        )
+
+    # check if car type is selected
+
+    if car_type == '':
+        errors.update(
+            car_type_required="Please select a car type."
+        )
+
     if len(errors) > 0:
         car_brand = db.brands.find()
         flash("Unable to create listing", "danger")
         previous_values = request.form.to_dict()
-        previous_values['car_brand'] = ObjectId(previous_values['car_brand'])
+        previous_values['car_brand'] = previous_values['car_brand']
         return render_template("create_listing.template.html", errors=errors, previous_values=previous_values, car_brand=car_brand)
 
     # fetch the info of the brand by its ID
 
-    car_brand = db.brands.find_one({
-        '_id': ObjectId(brand_id)
+    car_brand = db.brands.find({
+        'brand': car_brand
     })
 
     # fetch the info of the user by its ID
@@ -214,7 +235,7 @@ def process_create():
         'seller_name': flask_login.current_user.username,
         # 'seller_contact' : flask_login.current_user.phone,
         'car': {
-            '_id': ObjectId(brand_id),
+            '_id': ObjectId(car_brand),
             'car_brand': car_brand["brand"],
             'car_model': car_model,
             'car_type': car_type,
@@ -232,7 +253,7 @@ def process_create():
 
     flash("New listing has been created!", "success")
 
-    return redirect(url_for('show_created', inserted_listing_id=inserted_listing.inserted_id))
+    return redirect(url_for('show_created', inserted_listing_id=inserted_listing.inserted_id, car_brand=car_brand))
 
 # Show Created listing
 

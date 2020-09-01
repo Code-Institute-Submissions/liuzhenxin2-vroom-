@@ -8,6 +8,9 @@
     {%if not previous_values %}
         {%set previous_values = {} %}
     {%endif%}
+    {%if not errors %}
+        {%set errors = {} %}
+    {%endif%}
 
     {% include "all_create_listing.template.html" %}
 

@@ -1,5 +1,5 @@
 {% extends 'base.template.html' %} {% block content %}
-<h3 class="text-center">Your dream car is just a few clicks away!</h3>
+<h1 class="text-center"><b>Your dream car is just a few clicks away!</b></h1>
 
 <form method="GET" class="form-inline">
 {%with%}
@@ -50,7 +50,7 @@
             {%if number_of_results > 0 %}
                 <li class="page-item">
                     <a
-                    href="{{ url_for('search', page_number=page_no, car_seller_name=car_seller_name, car_condition=car_condition, car_brand_name=car_brand_name, car_model_name=car_model_name) }}"
+                    href="{{ url_for('search', page_number=page_number, car_seller_name=car_seller_name, car_condition=car_condition, car_brand_name=car_brand_name, car_model_name=car_model_name) }}"
                     class="page-link">{{page_no+1}}</a>
                 </li>
             {%endif%}
