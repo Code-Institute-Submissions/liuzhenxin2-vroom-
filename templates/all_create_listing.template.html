@@ -1,4 +1,5 @@
 <div>
+
     <h3>Car Details:</h3>
     <select name="car_brand" class="form-control mt-3 w-100 {%if 'car_brand_required' in errors %} is-invalid {%endif%}">
         <option value="" {%if previous_values == "" %} selected {%endif%}>Please select a car brand</option>
@@ -11,7 +12,7 @@
     </div>
 </div>
 <div>    
-    <input type="text" name="car_model" value="{{previous_values.car_model}}" placeholder="Car Model" class="form-control mt-3 w-100 {%if 'model_too_short' or 'model_invalid_character' in errors %} is-invalid {%endif%}">
+    <input type="text" name="car_model" value="{{previous_values.car_model}}" placeholder="Car Model" class="form-control mt-3 w-100 {%if 'model_too_short' in errors or 'model_invalid_character' in errors %} is-invalid {%endif%}">
     <div class="invalid-feedback">
         {{errors.model_too_short}}
     </div>
