@@ -3,7 +3,7 @@
     <select name="car_brand" class="form-control mt-3 w-100 {%if 'car_brand_required' in errors %} is-invalid {%endif%}">
         <option value="" {%if previous_values == "" %} selected {%endif%}>Please select a car brand</option>
         {% for each_brand in car_brand %}
-        <option value="{{each_brand.brand}}" {%if previous_values and each_brand.brand==previous_values.brand%} selected {%endif%}>{{each_brand.brand}}</option>
+        <option value="{{each_brand.brand}}" {%if previous_values and each_brand.brand==previous_values.car_brand%} selected {%endif%}>{{each_brand.brand}}</option>
         {%endfor%}
     </select>
     <div class="invalid-feedback">
