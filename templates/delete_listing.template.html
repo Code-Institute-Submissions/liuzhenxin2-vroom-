@@ -6,8 +6,8 @@
 
     <form method="POST">
     
-    <input type="submit" value="Delete" class="btn btn-danger">
-    <a href="{{url_for('show_my_listings', seller_id=current_user.account_id)}}" class="btn btn-success">No</a>
+    <input type="submit" value="Delete" class="btn btn-danger w-100 mt-5 mb-3" style="font-weight: bold;">
+    <a href="{{url_for('show_my_listings', seller_id=current_user.account_id)}}" class="btn btn-success w-100"><b>No</b></a>
     
     </form>
 {%endblock%}

@@ -84,7 +84,7 @@ def process_register():
 
     special_char_filter = '[\w\s]'
 
-    special_char = re.sub(special_char_filter,'',password)
+    special_char = re.sub(special_char_filter, '', password)
 
     # check if password has spacing
 
@@ -104,7 +104,7 @@ def process_register():
     if password_spacing != '':
         user_errors.update(
             password_no_spacing="Password must not have spacing."
-        )  
+        )
 
     if len(user_errors) > 0:
         car_brand = db.brands.find()
@@ -116,8 +116,6 @@ def process_register():
     users = db.users.find_one({
         'email': email
     })
-
-
 
     if users:
         flash("Email already exists", "danger")
@@ -222,14 +220,14 @@ def process_create():
     car_mileage = request.form.get("car_mileage")
 
     # check for error messages
-
+    print(request.form)
     # accumulator
 
     errors = {}
 
     # check if car brand is selected
 
-    if car_brand =='':
+    if car_brand == '':
         errors.update(
             car_brand_required='Please select a car brand.'
         )
@@ -242,9 +240,13 @@ def process_create():
 
     # check if car model has invalid characters in it
 
-    if ','or'.'or'!'or'@'or'#'or'$'or'%'or'^'or'&'or'*'or'('or')'or'+'or'='or'-'or'_'or'?'or'>'or'<'or';'or':'in car_model:
+    special_char_filter = '[\w\s]'
+
+    special_char = re.sub(special_char_filter, '', car_model)
+
+    if special_char != '':
         errors.update(
-            model_invalid_character= "Only numbers and alphabets are allowed in this field."
+            model_invalid_character="Only numbers and alphabets are allowed in this field."
         )
 
     # check if car type is selected
@@ -258,14 +260,7 @@ def process_create():
         car_brand = db.brands.find()
         flash("Unable to create listing", "danger")
         previous_values = request.form.to_dict()
-        previous_values['car_brand'] = previous_values['car_brand']
         return render_template("create_listing.template.html", errors=errors, previous_values=previous_values, car_brand=car_brand)
-
-    # fetch the info of the brand by its ID
-
-    car_brand = db.brands.find({
-        'brand': car_brand
-    })
 
     # fetch the info of the user by its ID
 
@@ -275,8 +270,8 @@ def process_create():
         'seller_name': flask_login.current_user.username,
         # 'seller_contact' : flask_login.current_user.phone,
         'car': {
-            '_id': ObjectId(car_brand),
-            'car_brand': car_brand["brand"],
+            '_id': ObjectId(),
+            'car_brand': car_brand,
             'car_model': car_model,
             'car_type': car_type,
             'car_hp': car_hp,
@@ -459,19 +454,17 @@ def search():
 
     # calculate how many results to skip depending the page number
 
-    
     number_of_results = db.listings.find(
         criteria).count()
     page_size = 2
-    number_of_pages = math.ceil(number_of_results / page_size) -1
+    number_of_pages = math.ceil(number_of_results / page_size) - 1
     page_number = request.args.get('page_number') or '0'
     page_number = int(page_number)
     number_to_skip = page_number * page_size
     listings = db.listings.find(
         criteria).skip(number_to_skip).limit(page_size)
 
-
-    return render_template('search.template.html', listings=listings, 
+    return render_template('search.template.html', listings=listings,
                            page_number=page_number,
                            number_of_pages=number_of_pages,
                            car_seller_name=car_seller_name,
