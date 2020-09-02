@@ -346,7 +346,7 @@ def show_update(listing_id):
 @app.route("/update/<listing_id>", methods=["POST"])
 @flask_login.login_required
 def process_update(listing_id):
-    brand_id = request.form.get("car_brand")
+    brand_name = request.form.get("car_brand")
     car_model = request.form.get("car_model")
     car_type = request.form.get("car_type")
     car_hp = request.form.get("car_hp")
@@ -356,7 +356,7 @@ def process_update(listing_id):
     car_mileage = request.form.get("car_mileage")
 
     car_brand = db.brands.find_one({
-        '_id': ObjectId(brand_id)
+        'brand': brand_name
     })
 
     listing = db.listings.find_one({
@@ -369,7 +369,7 @@ def process_update(listing_id):
         {
         '$set': {
             'car': {
-                '_id': ObjectId(brand_id),
+                '_id': ObjectId(),
                 'car_brand': car_brand["brand"],
                 'car_model': car_model,
                 'car_type': car_type,
@@ -381,6 +381,8 @@ def process_update(listing_id):
             }
         }
     })
+
+    flash("Listing has been updated!", "success")
     return redirect(url_for('show_updated', listing_id=listing_id))
 
 
@@ -409,6 +411,7 @@ def process_delete_listing(listing_id):
     db.listings.remove({
         '_id': ObjectId(listing_id)
     })
+    flash("Listing has been deleted!", "success")
     return redirect(url_for("show_all_listings"))
 
 
