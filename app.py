@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for, session
 import os
 import pymongo
 import flask_login
@@ -423,6 +423,7 @@ def search():
     # get all the search terms
     # reminder: if the method is "GET", we retrieve the fields by accessing
     # request.args
+
     car_seller_name = request.args.get('car_seller_name') or ''
     car_brand_name = request.args.get('car_brand_name') or ''
     car_model_name = request.args.get('car_model_name') or ''
@@ -458,22 +459,17 @@ def search():
 
     # calculate how many results to skip depending the page number
 
-    if len(criteria) != 0:
-        number_of_results = db.listings.find(
-            criteria).count()
-        page_size = 1
-        number_of_pages = math.ceil(number_of_results / page_size)-1
-        page_number = request.args.get('page_number') or '0'
-        page_number = int(page_number)
-        number_to_skip = page_number * page_size
-        listings = db.listings.find(
-            criteria).skip(number_to_skip).limit(page_size)
+    
+    number_of_results = db.listings.find(
+        criteria).count()
+    page_size = 2
+    number_of_pages = math.ceil(number_of_results / page_size) -1
+    page_number = request.args.get('page_number') or '0'
+    page_number = int(page_number)
+    number_to_skip = page_number * page_size
+    listings = db.listings.find(
+        criteria).skip(number_to_skip).limit(page_size)
 
-    else:
-        listings = []
-        page_number = ''
-        number_of_pages = ''
-        number_of_results = ''
 
     return render_template('search.template.html', listings=listings, 
                            page_number=page_number,

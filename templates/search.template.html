@@ -16,11 +16,11 @@
     {%endfor%}
     </select>
     <input
-    type="text"
-    name="car_model_name"
-    class="form-control mt-3 w-100"
-    value="{{car_model_name}}"
-    placeholder="Enter car model"
+        type="text"
+        name="car_model_name"
+        class="form-control mt-3 w-100"
+        value="{{car_model_name}}"
+        placeholder="Enter car model"
     />
     <select name="search_car_condition" class="form-control mt-3 w-100">
         <option value="" {%if previous_values_condition == "" %} selected {%endif%}>Car condition</option>
@@ -39,26 +39,24 @@
 </form>
 <nav>
     <ul class="pagination d-flex justify-content-center">
-        {% if page_number >= 1 %}
+        {% if page_number > 0 %}
             <li class="page-item">
                 <a class="page-link"
-                href="{{ url_for('search', page_number=page_number-1, car_seller_name=car_seller_name, car_condition=car_condition, car_brand_name=car_brand_name, car_model_name=car_model_name) }}"
+                href="{{ url_for('search', page_number=page_number-1) }}"
                 >Previous Page</a>
             </li>
         {%endif%}
-        {% for page_no in range(number_of_pages+1) %}
-            {%if number_of_results > 0 %}
-                <li class="page-item">
-                    <a
-                    href="{{ url_for('search', page_number=page_number, car_seller_name=car_seller_name, car_condition=car_condition, car_brand_name=car_brand_name, car_model_name=car_model_name) }}"
-                    class="page-link">{{page_no+1}}</a>
-                </li>
-            {%endif%}
-        {% endfor %} 
-        {% if page_number < number_of_pages %}
+        {% for page_no in range(number_of_pages) %}
             <li class="page-item">
                 <a
-                href="{{ url_for('search', page_number=page_number+1, car_seller_name=car_seller_name, car_condition=car_condition, car_brand_name=car_brand_name, car_model_name=car_model_name) }}"
+                href="{{ url_for('search', page_number=page_no) }}"
+                class="page-link">{{page_no+1}}</a>
+            </li>
+        {% endfor %} 
+        {% if page_number <= number_of_pages %}
+            <li class="page-item">
+                <a
+                href="{{ url_for('search', page_number=page_number+1) }}"
                 class="page-link">Next Page</a>
             </li>
         {% endif%} 
@@ -69,7 +67,9 @@ class="row row-cols-1 row-cols-md-3 d-flex justify-content-around align-items-st
 >
 
 {%if number_of_results==0 %}
-    
+<div class="card d-flex justify-content-center text-center">
+    <h1>No results found! Please try again.</h1>
+</div>
 {%endif%}
 
 {% for each_listing in listings %}
