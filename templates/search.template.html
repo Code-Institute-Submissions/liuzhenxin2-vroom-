@@ -53,7 +53,7 @@
                 class="page-link">{{page_no+1}}</a>
             </li>
         {% endfor %} 
-        {% if page_number <= number_of_pages %}
+        {% if page_number < number_of_pages %}
             <li class="page-item">
                 <a
                 href="{{ url_for('search', page_number=page_number+1) }}"

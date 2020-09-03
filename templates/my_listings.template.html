@@ -54,10 +54,6 @@ Vroom! - My store
             </a>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Sold By:</h5>
-            <ul class="list-group list-group-flush">
-            <li class="list-group-item p-0 mb-3 w-100"><a href="{{url_for('show_seller_listings', seller_id=each_listing.seller_id)}}" class="btn btn-primary w-100"><b>{{each_listing.seller_name}}</b></a></li>
-            </ul>
             <h5 class="card-title">Listed on:</h5>
             <ul class="list-group list-group-flush">
             <li class="list-group-item p-0 mb-3 w-100"><b>{{each_listing.date_listed.strftime('%Y-%m-%d')}}</b></li>
