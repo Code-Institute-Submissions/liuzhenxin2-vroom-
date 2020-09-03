@@ -32,10 +32,10 @@
     <!-- Toastr css -->
     <link href="toastr.css" rel="stylesheet" />
 
-    <title>Vroom!</title>
+    <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+    <nav class="navbar navbar-expand-lg navbar-light mb-5" style="background-color: #d6e0f0;">
       <a class="navbar-brand" href="{{url_for('home')}}"><img src="{{url_for('static', filename='pictures/vroomsmlogo.png')}}" width="100" height="auto"></a>
       <button
         class="navbar-toggler"

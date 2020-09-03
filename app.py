@@ -5,6 +5,7 @@ import flask_login
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
 import datetime
+from datetime import date
 from passlib.hash import pbkdf2_sha256
 import math
 import re
@@ -218,9 +219,8 @@ def process_create():
     car_year = request.form.get("car_year")
     car_price = request.form.get("car_price")
     car_mileage = request.form.get("car_mileage")
-
+    listing_name = request.form.get("listing_name")
     # check for error messages
-    print(request.form)
     # accumulator
 
     errors = {}
@@ -266,8 +266,10 @@ def process_create():
 
     # create the query
     new_listing = {
+        'listing_name': listing_name,
         'seller_id': flask_login.current_user.account_id,
         'seller_name': flask_login.current_user.username,
+        'date_listed': datetime.datetime.today(),
         # 'seller_contact' : flask_login.current_user.phone,
         'car': {
             '_id': ObjectId(),
