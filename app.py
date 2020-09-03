@@ -323,9 +323,9 @@ def show_seller_listings(seller_id):
         'seller_id': ObjectId(seller_id)
     })
     seller_listing = db.listings.find_one({
-        '_id': ObjectId()
+        'seller_id': ObjectId(seller_id)
     })
-    return render_template("seller_listings.template.html", listings=listings)
+    return render_template("seller_listings.template.html", listings=listings, seller_listing=seller_listing)
 
 
 @app.route("/update/<listing_id>")
