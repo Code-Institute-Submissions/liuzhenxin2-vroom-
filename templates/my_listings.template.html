@@ -6,6 +6,39 @@ Vroom! - My store
 <div>
     <a href="{{url_for('show_create')}}" class="btn btn-primary mb-5 w-100"><b>Create Your Listing</b></a>
 </div>
+<nav>
+    <ul class="pagination d-flex justify-content-center">
+        {% if page_number > 0 %}
+            <li class="page-item">
+                <a class="page-link"
+                href="{{ url_for('show_my_listings', page_number=page_number-1, seller_id=seller_id) }}"
+                ><b>Previous Page</b></a>
+            </li>
+        {%endif%}
+        {% for page_no in range(number_of_pages) %}
+            {%if page_number == page_no %}
+                <li class="page-item disabled">
+                    <a
+                    href="{{ url_for('show_my_listings', page_number=page_no, seller_id=seller_id) }}"
+                    class="page-link"><b>{{page_no+1}}</b></a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a
+                    href="{{ url_for('show_my_listings', page_number=page_no, seller_id=seller_id) }}"
+                    class="page-link"><b>{{page_no+1}}</b></a>
+                </li>
+            {%endif%}
+        {% endfor %} 
+        {% if page_number < number_of_pages-1 %}
+            <li class="page-item">
+                <a
+                href="{{ url_for('show_my_listings', page_number=page_number+1, seller_id=seller_id) }}"
+                class="page-link"><b>Next Page</b></a>
+            </li>
+        {% endif%} 
+    </ul>
+</nav>
 <div class="row row-cols-1 row-cols-md-3 d-flex justify-content-around align-items-start">
 {% for each_listing in listings %}
         <div class="card" style= "margin: 2%; border: 2px white solid; box-shadow: 5px 5px;">

@@ -193,8 +193,18 @@ def show_index():
 
 @app.route("/all_listings")
 def show_all_listings():
-    listings = db.listings.find()
-    return render_template("all_listings.template.html", listings=listings)
+    number_of_results = db.listings.find().count()
+    page_size = 2
+    number_of_pages = math.ceil(number_of_results / page_size)
+    page_number = request.args.get('page_number') or '0'
+    page_number = int(page_number)
+    number_to_skip = page_number * page_size
+    listings = db.listings.find().skip(number_to_skip).limit(page_size)
+    return render_template("all_listings.template.html", 
+                            listings=listings,
+                            number_of_results=number_of_results,
+                            number_of_pages=number_of_pages,
+                            page_number=page_number)
 
 # Create a listing page
 
@@ -308,24 +318,51 @@ def show_created(inserted_listing_id):
 @flask_login.login_required
 def show_my_listings(seller_id):
     seller_id = flask_login.current_user.account_id
+    number_of_results = db.listings.find({
+        'seller_id': ObjectId(seller_id)
+    }).count()
+    page_size = 2
+    number_of_pages = math.ceil(number_of_results / page_size)
+    page_number = request.args.get('page_number') or '0'
+    page_number = int(page_number)
+    number_to_skip = page_number * page_size
     listings = db.listings.find({
         'seller_id': ObjectId(seller_id)
-    })
+    }).skip(number_to_skip).limit(page_size)
     if ObjectId(seller_id) == flask_login.current_user.account_id:
-        return render_template("my_listings.template.html", listings=listings, seller_id=ObjectId(seller_id))
+        return render_template("my_listings.template.html",
+                                listings=listings,
+                                seller_id=ObjectId(seller_id),
+                                number_of_results=number_of_results,
+                                number_of_pages=number_of_pages,
+                                page_number=page_number)
     else:
         return redirect(url_for("show_all_listings"))
 
 
 @app.route("/seller_listings/<seller_id>")
 def show_seller_listings(seller_id):
-    listings = db.listings.find({
-        'seller_id': ObjectId(seller_id)
-    })
     seller_listing = db.listings.find_one({
         'seller_id': ObjectId(seller_id)
     })
-    return render_template("seller_listings.template.html", listings=listings, seller_listing=seller_listing)
+    number_of_results = db.listings.find({
+        'seller_id': ObjectId(seller_id)
+    }).count()
+    page_size = 2
+    number_of_pages = math.ceil(number_of_results / page_size)
+    page_number = request.args.get('page_number') or '0'
+    page_number = int(page_number)
+    number_to_skip = page_number * page_size
+    listings = db.listings.find({
+         'seller_id': ObjectId(seller_id)
+    }).skip(number_to_skip).limit(page_size)
+    return render_template("seller_listings.template.html", 
+                            listings=listings, 
+                            seller_listing=seller_listing,
+                            number_of_results=number_of_results,
+                            number_of_pages=number_of_pages,
+                            page_number=page_number,
+                            seller_id=ObjectId(seller_id))
 
 
 @app.route("/update/<listing_id>")
@@ -462,7 +499,7 @@ def search():
     number_of_results = db.listings.find(
         criteria).count()
     page_size = 2
-    number_of_pages = math.ceil(number_of_results / page_size) - 1
+    number_of_pages = math.ceil(number_of_results / page_size)
     page_number = request.args.get('page_number') or '0'
     page_number = int(page_number)
     number_to_skip = page_number * page_size
