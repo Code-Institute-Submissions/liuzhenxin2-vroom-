@@ -43,21 +43,29 @@
             <li class="page-item">
                 <a class="page-link"
                 href="{{ url_for('search', page_number=page_number-1) }}"
-                >Previous Page</a>
+                ><b>Previous Page</b></a>
             </li>
         {%endif%}
         {% for page_no in range(number_of_pages) %}
-            <li class="page-item">
-                <a
-                href="{{ url_for('search', page_number=page_no) }}"
-                class="page-link">{{page_no+1}}</a>
-            </li>
+            {%if page_number == page_no %}
+                <li class="page-item disabled">
+                    <a
+                    href="{{ url_for('search', page_number=page_no) }}"
+                    class="page-link"><b>{{page_no+1}}</b></a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a
+                    href="{{ url_for('search', page_number=page_no) }}"
+                    class="page-link"><b>{{page_no+1}}</b></a>
+                </li>
+            {%endif%}
         {% endfor %} 
         {% if page_number < number_of_pages %}
             <li class="page-item">
                 <a
                 href="{{ url_for('search', page_number=page_number+1) }}"
-                class="page-link">Next Page</a>
+                class="page-link"><b>Next Page</b></a>
             </li>
         {% endif%} 
     </ul>
