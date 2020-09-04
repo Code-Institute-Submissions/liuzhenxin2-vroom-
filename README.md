@@ -97,7 +97,9 @@ As this is a car buying/selling website,
 - [GitHub](https://github.com/) for version control
 - [toastr](https://github.com/CodeSeven/toastr) for displaying messages
 
+# Database design
 
+My complete ER Diagram can be found [here](https://github.com/liuzhenxin2/vroom-/blob/master/Vroom%20ERD.pdf)
 
 
 
