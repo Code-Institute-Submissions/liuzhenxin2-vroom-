@@ -4,15 +4,15 @@ Vroom! - Update listing
 {%endblock%}
 {% block content %}
 
-<h3>Update listing: {{listing._id}}</h3>
+<h3>Updating {{listing.listing_name}}</h3>
 
 <form method="POST">
 {%with %}
-    {%set previous_values=listing.car %}
+    {%set previous_values=listing %}
     {%if not errors %}
         {%set errors = {} %}
     {%endif%}
-    {% include 'all_create_listing.template.html' %}
+    {% include 'form_update_listing.template.html' %}
 {%endwith%}
 <input type="submit" value="Update" class="btn btn-primary mt-3 w-100" style="font-weight: bold;"/>
 <a href="{{url_for('show_my_listings', seller_id=current_user.account_id)}}" class="btn btn-danger w-100 mt-3 mb-5"><b>Cancel</b></a>

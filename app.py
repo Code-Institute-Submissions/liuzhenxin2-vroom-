@@ -304,18 +304,7 @@ def process_create():
 
     flash("New listing has been created!", "success")
 
-    return redirect(url_for('show_created', inserted_listing_id=inserted_listing.inserted_id, car_brand=car_brand))
-
-# Show Created listing
-
-
-@app.route("/created/<inserted_listing_id>")
-def show_created(inserted_listing_id):
-    listing = db.listings.find({
-        '_id': ObjectId(inserted_listing_id)
-    })
-    car_brand = db.brands.find()
-    return render_template("created_listing.template.html", listing=listing)
+    return redirect(url_for('show_all_listings', car_brand=car_brand))
 
 
 @app.route("/my_listings/<seller_id>")
@@ -389,6 +378,7 @@ def show_update(listing_id):
 @app.route("/update/<listing_id>", methods=["POST"])
 @flask_login.login_required
 def process_update(listing_id):
+    listing_name = request.form.get("listing_name")
     brand_name = request.form.get("car_brand")
     car_model = request.form.get("car_model")
     car_type = request.form.get("car_type")
@@ -407,10 +397,11 @@ def process_update(listing_id):
     })
 
     db.listings.update_one({
-        '_id': ObjectId(listing_id)
+        '_id': ObjectId(listing_id),
     },
         {
         '$set': {
+            'listing_name': listing_name,
             'car': {
                 '_id': ObjectId(),
                 'car_brand': car_brand["brand"],
@@ -426,7 +417,7 @@ def process_update(listing_id):
     })
 
     flash("Listing has been updated!", "success")
-    return redirect(url_for('show_updated', listing_id=listing_id))
+    return redirect(url_for('show_all_listings'))
 
 
 @app.route("/updated/<listing_id>")

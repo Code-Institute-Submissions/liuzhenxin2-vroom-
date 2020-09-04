@@ -14,7 +14,7 @@ Vroom! - Create your listing
         {%set errors = {} %}
     {%endif%}
 
-    {% include "all_create_listing.template.html" %}
+    {% include "form_create_listing.template.html" %}
 
     <input type="submit" value="Create" class="btn btn-primary form-control mt-3 w-100" style="font-weight: bold;">
     <a href="{{url_for('show_all_listings')}}" value="Cancel" class="btn btn-danger form-control mt-3 mb-5 w-100"><b>Cancel</b></a>

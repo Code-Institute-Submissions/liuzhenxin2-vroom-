@@ -1,8 +1,12 @@
+<!-- form content for register form -->
 <div>
+    <!-- email form -->
     <input type="text" class="form-control mb-3"  placeholder="Email" value="{{previous_values.email}}" name="email"/>
 </div>
 <div>
+    <!-- password form -->
     <input type="password" class="form-control mb-3 w-100 {%if 'password_too_short' or 'password_no_special' or 'password_no_spacing' in user_errors %} is-invalid {%endif%}" placeholder="Password" value="{{previous_values.password}}" name="password"/>
+    <!-- password form errors display -->
     <div class="invalid-feedback">
         {{user_errors.password_too_short}}
     </div>
@@ -14,9 +18,12 @@
     </div>
 </div>
 <div>
+    <!-- displayed name/shop name  -->
     <input type="text" class="form-control mb-3" placeholder="Displayed Name" value="{{previous_values.username}}" name="username"/>
 </div>
 <div>
+    <!-- phone number -->
     <input type="text" class="form-control mb-3" placeholder="Phone Number" value="{{previous_values.phone}}" name="phone"/>
 </div>
+    <!-- submit button -->
 <input type="submit" value="Register" class="btn btn-primary mt-3 w-100" style="font-weight: bold;"/>
