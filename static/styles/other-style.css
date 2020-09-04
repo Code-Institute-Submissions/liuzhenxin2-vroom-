@@ -9,3 +9,15 @@ body {
 .price-col {
     color: #ff4b5c;
 }
+
+.hr-style {
+    border: 2px solid black;
+}
+
+.footer-style {
+    background-color: #d6e0f0;
+}
+
+.header-shadow {
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+}

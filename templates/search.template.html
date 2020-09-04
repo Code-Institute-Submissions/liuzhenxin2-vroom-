@@ -3,7 +3,7 @@
 Vroom! - Search
 {%endblock%}
 {% block content %}
-<h1 class="text-center"><b>Your dream car is just a few clicks away!</b></h1>
+<h1 class="text-center"><b  class="text-primary header-shadow">Your dream car is just a few clicks away!</b></h1>
 
 <form method="GET" class="form-inline">
 {%with%}
@@ -114,7 +114,7 @@ class="row row-cols-1 row-cols-md-3 d-flex justify-content-around align-items-st
     <hr>
     <h5 class="card-title">Contact:</h5>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item p-0 mb-3 w-100"><b><span class="text-primary">Phone No:</span></b> {{each_listing.seller_phone}}<br><b><span class="text-primary">Email:</span></b> {{each_listing.seller_email}}</li>
+        <li class="list-group-item p-0 mb-3 w-100 text-primary"><b>Phone No: {{each_listing.seller_phone}}<br>Email: {{each_listing.seller_email}}</b></li>
     </ul>
     <div id="accordion_{{each_listing._id}}">
         <div class="card">

@@ -5,8 +5,9 @@ Vroom! - My store
 {% block content %}
 <!-- Create listing button link -->
 <div>
-    <a href="{{url_for('show_create')}}" class="btn btn-primary mb-5 w-100"><b>Create Your Listing</b></a>
+    <a href="{{url_for('show_create')}}" class="btn btn-primary mb-3 w-100"><b>Create Your Listing</b></a>
 </div>
+<hr class="hr-style">
 <!-- pagination -->
 <nav>
     <ul class="pagination d-flex justify-content-center">
@@ -46,7 +47,7 @@ Vroom! - My store
 {% for each_listing in listings %}
 <div class="card" style="margin: 2%; border: 2px white solid; box-shadow: 5px 5px;">
     <h5 class="card-title text-center p-4"><b>{{each_listing.listing_name}}</b></h5>
-        <img src="{{url_for('static', filename='pictures/index-main-background.jpg')}}" class="w-100"/>
+        <img src="{{each_listing.photolink}}" class="w-100"/>
     <div class="card-body">
     <h5 class="card-title">Listed on:</h5>
     <ul class="list-group list-group-flush">
