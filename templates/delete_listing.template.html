@@ -7,8 +7,9 @@ Vroom! - Delete listing
     <h2>Are you sure you want to delete listing: "{{listing.listing_name}}"</h2>
 
     <form method="POST">
-    
+    <!-- Delete button -->
     <input type="submit" value="Delete" class="btn btn-danger w-100 mt-5 mb-3" style="font-weight: bold;">
+    <!-- cancel delete button -->
     <a href="{{url_for('show_my_listings', seller_id=current_user.account_id)}}" class="btn btn-primary w-100"><b>No</b></a>
     
     </form>

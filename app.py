@@ -163,6 +163,8 @@ def process_login():
         # `account_id`
         user_object.account_id = user["_id"]
 
+        user_object.phone = user["phone"]
+
         user_object.username = user["username"]
         # create the user session
         flask_login.login_user(user_object)
@@ -279,6 +281,8 @@ def process_create():
         'listing_name': listing_name,
         'seller_id': flask_login.current_user.account_id,
         'seller_name': flask_login.current_user.username,
+        'seller_phone': flask_login.current_user.phone,
+        'seller_email': flask_login.current_user.id,
         'date_listed': datetime.datetime.today(),
         # 'seller_contact' : flask_login.current_user.phone,
         'car': {
