@@ -67,13 +67,9 @@ car I am looking for.
 - Filter search results and sort by price or date listed
 - Wishlist for users to add in sortlisted listings
 
-
-## Structure
-
-
 ## Skeleton
 
-Wireframes can be found [here]()
+Wireframes can be found [here](https://github.com/liuzhenxin2/vroom-/blob/master/vroom.pdf)
 
 
 ## Surface
