@@ -4,6 +4,7 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    margin-bottom: 10%;
 }
 
 .price-col {
@@ -16,6 +17,8 @@ body {
 
 .footer-style {
     background-color: #d6e0f0;
+    position: fixed;
+    bottom: 0;
 }
 
 .header-shadow {

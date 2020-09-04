@@ -19,6 +19,19 @@ body {
     animation-fill-mode: forwards;
 }
 
+@media only screen and (max-width: 900px) {
+  #main-background-container {
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    height: 50vh;
+    border-radius: 15px;
+    background-color: rgba(255,255,255,0.8);
+    animation: containerfadein ease 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+}
+
 
 @keyframes containerfadein {
     0% {
