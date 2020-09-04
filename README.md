@@ -132,7 +132,7 @@ pip3 freeze --local > requirements.txt
 
 # Credits
 
-
+- Google and Unsplash for images
 
 
 
