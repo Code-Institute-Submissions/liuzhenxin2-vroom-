@@ -106,6 +106,10 @@ def process_register():
         user_errors.update(
             password_no_spacing="Password must not have spacing."
         )
+    
+    if len(phone) < 7:
+        user_errors.update(
+            phone_too_short="Please key in at least 7 digits for phone number.")
 
     if len(user_errors) > 0:
         car_brand = db.brands.find()
@@ -418,17 +422,6 @@ def process_update(listing_id):
 
     flash("Listing has been updated!", "success")
     return redirect(url_for('show_all_listings'))
-
-
-@app.route("/updated/<listing_id>")
-@flask_login.login_required
-def show_updated(listing_id):
-    car_brand = db.brands.find()
-    listing = db.listings.find_one({
-        '_id': ObjectId(listing_id)
-    })
-    return render_template("updated_listing.template.html", listing=listing)
-
 
 @app.route("/delete/<listing_id>")
 @flask_login.login_required

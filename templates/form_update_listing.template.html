@@ -3,7 +3,7 @@
     <h3>Car Details:</h3>
     <!-- listing title form -->
     <div>
-        <input type="text" name="listing_name" value="{{previous_values.listing_name}}" placeholder="Give your listing an interesting title!" class="form-control mt-3 w-100">
+        <input type="text" name="listing_name" value="{{previous_values.listing_name}}" placeholder="Give your listing an interesting title!" class="form-control mt-3 w-100" required>
     </div>
     <!-- car brand selection form -->
     <select name="car_brand" class="form-control mt-3 w-100 {%if 'car_brand_required' in errors %} is-invalid {%endif%}">
@@ -19,7 +19,7 @@
 </div>
 <div>    
     <!-- form for car model -->
-    <input type="text" name="car_model" value="{{previous_values.car.car_model}}" placeholder="Car Model" class="form-control mt-3 w-100 {%if 'model_too_short' in errors or 'model_invalid_character' in errors %} is-invalid {%endif%}">
+    <input type="text" name="car_model" value="{{previous_values.car.car_model}}" placeholder="Car Model" class="form-control mt-3 w-100 {%if 'model_too_short' in errors or 'model_invalid_character' in errors %} is-invalid {%endif%}" required>
     <!-- errors display for car models -->
     <div class="invalid-feedback">
         {{errors.model_too_short}}
@@ -44,7 +44,7 @@
 </div>
 <div>
     <!-- form for car horsepower -->
-    <input type="number" name="car_hp" value="{{previous_values.car.car_hp}}" min=0 placeholder="Horse Power" class="form-control mt-3 w-100">
+    <input type="number" name="car_hp" value="{{previous_values.car.car_hp}}" min=0 placeholder="Horse Power" class="form-control mt-3 w-100" required>
 </div>
 <div>
     <!-- form for car condition -->
@@ -55,15 +55,15 @@
 </div>
 <div>
     <!-- form for car year produced -->
-    <input type="number" name="car_year" placeholder="Manufactured Year" min=0 value="{{previous_values.car.car_year}}" class="form-control mt-3 w-100">
+    <input type="number" name="car_year" placeholder="Manufactured Year" min=0 value="{{previous_values.car.car_year}}" class="form-control mt-3 w-100" required>
 </div>
 <div> 
     <!-- form for asking price -->
-    <input type="number" name="car_price" placeholder="Price" min=0 step="0.01" value="{{previous_values.car.car_price}}" class="form-control mt-3 w-100">
+    <input type="number" name="car_price" placeholder="Price" min=0 step="0.01" value="{{previous_values.car.car_price}}" class="form-control mt-3 w-100" required>
 </div>
 <div>
     <!-- form for car mileage driven    -->
-    <input type="number" name="car_mileage" placeholder="Mileage" min=0 step="0.01" value="{{previous_values.car.car_mileage}}" class="form-control mt-3 mb-3 w-100">
+    <input type="number" name="car_mileage" placeholder="Mileage" min=0 step="0.01" value="{{previous_values.car.car_mileage}}" class="form-control mt-3 mb-3 w-100" required>
 </div>
 <div>
     <!-- input form for image upload -->
