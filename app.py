@@ -117,7 +117,6 @@ def process_register():
         previous_values = request.form.to_dict()
         return render_template("register.template.html", user_errors=user_errors, previous_values=previous_values)
 
-    # TODO: Vadliate if the email and password are proper
     users = db.users.find_one({
         'email': email
     })
@@ -191,7 +190,6 @@ def logout():
 
 # Main page route
 
-
 @app.route("/")
 def show_index():
     return render_template("index.html")
@@ -213,7 +211,6 @@ def show_all_listings():
                             page_number=page_number)
 
 # Create a listing page
-
 
 @app.route("/create")
 @flask_login.login_required
@@ -237,9 +234,8 @@ def process_create():
     car_mileage = request.form.get("car_mileage")
     listing_name = request.form.get("listing_name")
     photolink = request.form.get("photolink")
-    # check for error messages
-    # accumulator
 
+    # accumulator
     errors = {}
 
     # check if car brand is selected
@@ -266,8 +262,6 @@ def process_create():
             model_invalid_character="Only numbers and alphabets are allowed in this field."
         )
 
-    # check if car type is selected
-
     if car_type == '':
         errors.update(
             car_type_required="Please select a car type."
@@ -279,9 +273,6 @@ def process_create():
         previous_values = request.form.to_dict()
         return render_template("create_listing.template.html", errors=errors, previous_values=previous_values, car_brand=car_brand)
 
-    # fetch the info of the user by its ID
-
-    # create the query
     new_listing = {
         'listing_name': listing_name,
         'seller_id': flask_login.current_user.account_id,
@@ -290,7 +281,6 @@ def process_create():
         'seller_email': flask_login.current_user.id,
         'photolink': photolink,
         'date_listed': datetime.datetime.today(),
-        # 'seller_contact' : flask_login.current_user.phone,
         'car': {
             '_id': ObjectId(),
             'car_brand': car_brand,
@@ -303,8 +293,6 @@ def process_create():
             'car_mileage': car_mileage
         }
     }
-
-    # execute the query
 
     inserted_listing = db.listings.insert_one(new_listing)
 
@@ -446,10 +434,7 @@ def process_delete_listing(listing_id):
 
 @app.route('/search')
 def search():
-
     # get all the search terms
-    # reminder: if the method is "GET", we retrieve the fields by accessing
-    # request.args
 
     car_seller_name = request.args.get('car_seller_name') or ''
     car_brand_name = request.args.get('car_brand_name') or ''
