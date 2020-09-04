@@ -103,6 +103,11 @@ I used both reference and embeded documents for my database design.
 
 A detailed testing file can be found [here](https://github.com/liuzhenxin2/vroom-/blob/master/Vroom%20testing.pdf)
 
+### Bugs
+
+- Footer css stylings cant seem to be pushed to heroku
+- Background image(expect index page) cant seem to be 0.5 opacity
+
 # Deployment
 
 This website is deployed on Heroku. The URL for the deployed website is https://lzx1vroom.herokuapp.com/
