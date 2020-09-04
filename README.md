@@ -99,7 +99,8 @@ As this is a car buying/selling website,
 
 # Database design
 
-My complete ER Diagram can be found [here](https://github.com/liuzhenxin2/vroom-/blob/master/Vroom%20ERD.pdf)
+- My complete ER Diagram can be found [here](https://github.com/liuzhenxin2/vroom-/blob/master/Vroom%20ERD.pdf)
+- A sample mongoDB document can be found [here](https://github.com/liuzhenxin2/vroom-/blob/master/Vroom%20sample%20mongo%20doc.png)
 
 
 
