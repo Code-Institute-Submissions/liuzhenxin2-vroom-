@@ -9,7 +9,7 @@ Please visit the live site [here](https://lzx1vroom.herokuapp.com/)
 ### For test users, please use the following account:
 - Email: **test@test.com**
 - Password: **12345678!**
-
+##### Add in any image by going to Google.com/images and right clicking to copy a image URL.
 
 
 # UI/UX
@@ -99,8 +99,41 @@ As this is a car buying/selling website,
 
 # Database design
 
+I used both reference and embeded documents for my database design.
 - My complete ER Diagram can be found [here](https://github.com/liuzhenxin2/vroom-/blob/master/Vroom%20ERD.pdf)
 - A sample mongoDB document can be found [here](https://github.com/liuzhenxin2/vroom-/blob/master/Vroom%20sample%20mongo%20doc.png)
+
+# Testing
+
+A detailed testing file can be found [here]()
+
+# Deployment
+
+This website is deployed on Heroku. The URL for the deployed website is https://lzx1vroom.herokuapp.com/
+
+To deploy on Heroku:
+
+1. Clone the master branch from github
+2. To list all the requirements in requirements.txt, run the following command in terminal:
+``` 
+pip3 freeze --local > requirements.txt 
+```
+3. Set Debug to False
+4. Procfile need to be created to run gunicorn upon deployment
+5. Git push to Heroku Master after all the documents ready
+6. Add public keys and private keys for the following to Heroku Config Vars settings:
+ - MongoDB URI
+ - SECRET KEY
+
+# File Hierarchy and Organisation
+
+- **Static** folder contains pictures and styles which contains pictures and css files respectively 
+- **templates** folder contains all html templates with jinja codes to render the display of the information from the database
+
+# Credits
+
+
+
 
 
 
