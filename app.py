@@ -236,6 +236,7 @@ def process_create():
     car_price = request.form.get("car_price")
     car_mileage = request.form.get("car_mileage")
     listing_name = request.form.get("listing_name")
+    photolink = request.form.get("photolink")
     # check for error messages
     # accumulator
 
@@ -287,6 +288,7 @@ def process_create():
         'seller_name': flask_login.current_user.username,
         'seller_phone': flask_login.current_user.phone,
         'seller_email': flask_login.current_user.id,
+        'photolink': photolink,
         'date_listed': datetime.datetime.today(),
         # 'seller_contact' : flask_login.current_user.phone,
         'car': {

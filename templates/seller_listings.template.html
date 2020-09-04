@@ -46,7 +46,7 @@
 	{% for each_listing in listings %}
 <div class="card" style="margin: 2%; border: 2px white solid; box-shadow: 5px 5px;">
     <h5 class="card-title text-center p-4"><b>{{each_listing.listing_name}}</b></h5>
-        <img src="{{url_for('static', filename='pictures/index-main-background.jpg')}}" class="w-100"/>
+        <img src="{{each_listing.photolink}}" class="w-100"/>
     <div class="card-body">
     <h5 class="card-title">Sold By:</h5>
     <ul class="list-group list-group-flush">
@@ -69,7 +69,7 @@
     <hr>
     <h5 class="card-title">Contact:</h5>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item p-0 mb-3 w-100 text-primary"><b>{{each_listing.seller_phone}}<br>{{each_listing.seller_email}}</b></li>
+        <li class="list-group-item p-0 mb-3 w-100"><b><span class="text-primary">Phone No:</span></b> {{each_listing.seller_phone}}<br><b><span class="text-primary">Email:</span></b> {{each_listing.seller_email}}</li>
     </ul>
     <div id="accordion_{{each_listing._id}}">
         <div class="card">
