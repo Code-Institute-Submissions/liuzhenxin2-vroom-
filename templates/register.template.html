@@ -6,16 +6,16 @@ Vroom! - Register
 <h1 class="mb-3 header-shadow">Register</h1>
 
 <form method="POST">
-{%with%}
-    {%if not previous_values %}
-        {%set previous_values = {} %}
-    {%endif%}
-    {%if not user_errors %}
-        {%set user_errors = {} %}
-    {%endif%}
+    {%with%}
+        {%if not previous_values %}
+            {%set previous_values = {} %}
+        {%endif%}
+        {%if not user_errors %}
+            {%set user_errors = {} %}
+        {%endif%}
 
-    {% include "register_form.template.html" %}
-{%endwith%}
+        {% include "register_form.template.html" %}
+    {%endwith%}
 </form>
 
 <h1 class="mt-3 mb-3 header-shadow">Already have an account?</h1>

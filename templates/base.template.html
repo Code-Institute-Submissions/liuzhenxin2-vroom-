@@ -1,125 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
 
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="anonymous"
-    />
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-    <!-- My own css -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='styles/other-style.css') }}"
-    />
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
 
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap"
-      rel="stylesheet"
-    />
+	<!-- My own css -->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/other-style.css') }}"/>
 
-    <!-- Toastr css -->
-    <link href="toastr.css" rel="stylesheet" />
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet"/>
 
-    <title>{% block title %}{% endblock %}</title>
-  </head>
-  <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light mb-5" style="background-color: #d6e0f0;">
-      <a class="navbar-brand" href="{{url_for('home')}}"><img src="{{url_for('static', filename='pictures/vroomsmlogo.png')}}" alt="logo" width="100" height="auto"></a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav w-100 justify-content-md-around">
-          <li class="nav-item" {% if not current_user.is_authenticated %}hidden{%endif%}>
-            <a class="nav-link" href="{{url_for('show_my_listings', seller_id=current_user.account_id)}}"
-              ><b>My Store</b></a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('show_all_listings')}}"><b>Listings</b></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('search')}}"><b>Search</b></a>
-          </li>
-          <li class="nav-item" {% if current_user.is_authenticated %}hidden{%endif%}>
-            <a class="nav-link" href="{{url_for('login')}}"
-              ><b class="text-primary">Login</b></a
-            >
-          </li>
-          <li class="nav-item" {% if current_user.is_authenticated %}hidden{%endif%}>
-            <a class="nav-link" href="{{url_for('register')}}"
-              ><b class="text-primary">Register</b></a
-            >
-          </li>
-          <li class="nav-item" {% if not current_user.is_authenticated %}hidden{%endif%}>
-            <a class="nav-link" href="{{url_for('logout')}}"
-              ><b class="text-danger">Logout</b></a
-            >
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <div class="container">
-      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+	<!-- Toastr css -->
+	<link href="toastr.css" rel="stylesheet"/>
+
+	<title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-light mb-5" style="background-color: #d6e0f0;">
+		<a class="navbar-brand" href="{{url_for('home')}}"><img src="{{url_for('static', filename='pictures/vroomsmlogo.png')}}" alt="logo" width="100" height="auto"></a>
+	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav w-100 justify-content-md-around">
+                <li class="nav-item" {% if not current_user.is_authenticated %}hidden{%endif%}>
+                    <a class="nav-link" href="{{url_for('show_my_listings', seller_id=current_user.account_id)}}"><b>My Store</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('show_all_listings')}}"><b>Listings</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('search')}}"><b>Search</b></a>
+                </li>
+                <li class="nav-item" {% if current_user.is_authenticated %}hidden{%endif%}>
+                    <a class="nav-link" href="{{url_for('login')}}"><b class="text-primary">Login</b></a>
+                </li>
+                <li class="nav-item" {% if current_user.is_authenticated %}hidden{%endif%}>
+                    <a class="nav-link" href="{{url_for('register')}}"><b class="text-primary">Register</b></a>
+                </li>
+                <li class="nav-item" {% if not current_user.is_authenticated %}hidden{%endif%}>
+                    <a class="nav-link" href="{{url_for('logout')}}"><b class="text-danger">Logout</b></a>
+                </li>
+            </ul>
+        </div>
+	</nav>
+	<div class="container">
+		{% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %} {% for category, message in messages %}
-      <div class="alert alert-{{category}}">
-        {{ message }}
-      </div>
-      {% endfor %} {% endif %} {% endwith %} 
-        {%block content %} 
-        
-        {%endblock%}
-    </div>
-    <!-- Footer -->
-        <footer class="p-2 mt-4 footer-style w-100">
-            <!-- Copyright -->
-            <div class="footer-copyright text-center py-3">© 2020 Copyright:
-                <span>Vroom-!</span>
-            </div>
-        </footer>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-      crossorigin="anonymous"
-    ></script>
-    <!-- Toastr script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+		<div class="alert alert-{{category}}">
+			{{ message }}
+		</div>
+		{% endfor %} {% endif %} {% endwith %}
+		{%block content %}
 
-    <script>
-      {% with messages = get_flashed_messages(with_categories=true) %}
+		{%endblock%}
+	</div>
+	<!-- Footer -->
+	<footer class="p-2 mt-4 footer-style w-100">
+		<!-- Copyright -->
+		<div class="footer-copyright text-center py-3">© 2020 Copyright:
+			<span>Vroom-!</span>
+		</div>
+	</footer>
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+	</script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+	</script>
+	<!-- Toastr script -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+	<script>
+		{% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
             {% for category, message in messages %}
                 {%if category=="success" %}
@@ -131,6 +96,7 @@
       {% endfor %}
       {% endif %}
       {% endwith %}
-    </script>
-  </body>
+	</script>
+</body>
+
 </html>
