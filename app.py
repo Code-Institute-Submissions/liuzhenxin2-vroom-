@@ -1,4 +1,5 @@
-from flask import Flask, flash, render_template, request, redirect, url_for, session
+from flask import (Flask, flash, render_template, request,
+                   redirect, url_for, session)
 import os
 import pymongo
 import flask_login
@@ -95,27 +96,31 @@ def process_register():
 
     if len(password) < 8:
         user_errors.update(
-            password_too_short="Please key in at least 8 characters for password.")
+            password_too_short="""Please key
+                                in at least 8 characters for password.""")
 
     if special_char == '':
         user_errors.update(
-            password_no_special="Password must contain at least 1 special character. E.g !,@,#"
-        )
+            password_no_special="""Password must contain at
+                                least 1 special character. E.g !,@,#""")
 
     if password_spacing != '':
         user_errors.update(
             password_no_spacing="Password must not have spacing."
         )
-    
+
     if len(phone) < 7:
         user_errors.update(
-            phone_too_short="Please key in at least 7 digits for phone number.")
+            phone_too_short="""Please key in
+                            at least 7 digits for phone number.""")
 
     if len(user_errors) > 0:
         car_brand = db.brands.find()
         flash("Unable to register", "danger")
         previous_values = request.form.to_dict()
-        return render_template("register.template.html", user_errors=user_errors, previous_values=previous_values)
+        return render_template("register.template.html",
+                               user_errors=user_errors,
+                               previous_values=previous_values)
 
     users = db.users.find_one({
         'email': email
@@ -124,7 +129,9 @@ def process_register():
     if users:
         flash("Email already exists", "danger")
         previous_values = request.form.to_dict()
-        return render_template('register.template.html', previous_values=previous_values, user_errors=user_errors)
+        return render_template('register.template.html',
+                               previous_values=previous_values,
+                               user_errors=user_errors)
     else:
         # Create the new user
         db.users.insert_one({
@@ -190,6 +197,7 @@ def logout():
 
 # Main page route
 
+
 @app.route("/")
 def show_index():
     return render_template("index.html")
@@ -204,13 +212,14 @@ def show_all_listings():
     page_number = int(page_number)
     number_to_skip = page_number * page_size
     listings = db.listings.find().skip(number_to_skip).limit(page_size)
-    return render_template("all_listings.template.html", 
-                            listings=listings,
-                            number_of_results=number_of_results,
-                            number_of_pages=number_of_pages,
-                            page_number=page_number)
+    return render_template("all_listings.template.html",
+                           listings=listings,
+                           number_of_results=number_of_results,
+                           number_of_pages=number_of_pages,
+                           page_number=page_number)
 
 # Create a listing page
+
 
 @app.route("/create")
 @flask_login.login_required
@@ -259,7 +268,8 @@ def process_create():
 
     if special_char != '':
         errors.update(
-            model_invalid_character="Only numbers and alphabets are allowed in this field."
+            model_invalid_character="""Only numbers and
+                                       alphabets are allowed in this field."""
         )
 
     if car_type == '':
@@ -271,7 +281,10 @@ def process_create():
         car_brand = db.brands.find()
         flash("Unable to create listing", "danger")
         previous_values = request.form.to_dict()
-        return render_template("create_listing.template.html", errors=errors, previous_values=previous_values, car_brand=car_brand)
+        return render_template("create_listing.template.html",
+                               errors=errors,
+                               previous_values=previous_values,
+                               car_brand=car_brand)
 
     new_listing = {
         'listing_name': listing_name,
@@ -318,11 +331,11 @@ def show_my_listings(seller_id):
     }).skip(number_to_skip).limit(page_size)
     if ObjectId(seller_id) == flask_login.current_user.account_id:
         return render_template("my_listings.template.html",
-                                listings=listings,
-                                seller_id=ObjectId(seller_id),
-                                number_of_results=number_of_results,
-                                number_of_pages=number_of_pages,
-                                page_number=page_number)
+                               listings=listings,
+                               seller_id=ObjectId(seller_id),
+                               number_of_results=number_of_results,
+                               number_of_pages=number_of_pages,
+                               page_number=page_number)
     else:
         return redirect(url_for("show_all_listings"))
 
@@ -343,13 +356,13 @@ def show_seller_listings(seller_id):
     listings = db.listings.find({
          'seller_id': ObjectId(seller_id)
     }).skip(number_to_skip).limit(page_size)
-    return render_template("seller_listings.template.html", 
-                            listings=listings, 
-                            seller_listing=seller_listing,
-                            number_of_results=number_of_results,
-                            number_of_pages=number_of_pages,
-                            page_number=page_number,
-                            seller_id=ObjectId(seller_id))
+    return render_template("seller_listings.template.html",
+                           listings=listings,
+                           seller_listing=seller_listing,
+                           number_of_results=number_of_results,
+                           number_of_pages=number_of_pages,
+                           page_number=page_number,
+                           seller_id=ObjectId(seller_id))
 
 
 @app.route("/update/<listing_id>")
@@ -364,7 +377,9 @@ def show_update(listing_id):
     })
     user_id = user['seller_id']
     if ObjectId(user_id) == flask_login.current_user.account_id:
-        return render_template("update_listing.template.html", listing=listing, car_brand=car_brand)
+        return render_template("update_listing.template.html",
+                               listing=listing,
+                               car_brand=car_brand)
     else:
         return redirect(url_for("show_all_listings"))
 
@@ -412,6 +427,7 @@ def process_update(listing_id):
 
     flash("Listing has been updated!", "success")
     return redirect(url_for('show_all_listings'))
+
 
 @app.route("/delete/<listing_id>")
 @flask_login.login_required
